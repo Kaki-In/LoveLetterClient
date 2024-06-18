@@ -36,7 +36,7 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
         blur = _QtWidgets.QGraphicsBlurEffect()
         blur.setBlurRadius(1.1)
         blur.setBlurHints(_QtWidgets.QGraphicsBlurEffect.BlurHint.QualityHint)
-        self.setGraphicsEffect(blur)
+#        self.setGraphicsEffect(blur)
         
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         pass

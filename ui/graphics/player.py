@@ -41,12 +41,12 @@ class PlayerDisplayedElement(GameDisplayedElement):
     
     def update_card_position(self):
         if self._first_card:
-            self._second_card_element.go_to_position(self._x - 9 * self._width/32, self._y)
+            self._second_card_element.go_to_position(self._x - 7 * self._width/32, self._y)
         else:
             self._second_card_element.go_to_position(self._x, self._y)
         
         if self._second_card:
-            self._first_card_element.go_to_position(self._x + 9 * self._width/32, self._y)
+            self._first_card_element.go_to_position(self._x + 7 * self._width/32, self._y)
         else:
             self._first_card_element.go_to_position(self._x, self._y)
         
@@ -95,11 +95,11 @@ class PlayerDisplayedElement(GameDisplayedElement):
         
         painter.setPen(_QtGui.QColor(0xFFFFFFFF ))
         
-        painter.drawText(_QtCore.QPoint(int(x + w/2 - text_width/2), int(y + h/10 - text_height/2)), self._name)
+        painter.drawText(_QtCore.QPoint(int(x + w/2 - text_width/2), int(y + h/5 - text_height/2)), self._name)
     
     
     def set_size(self, size: int) -> None:
-        self._width, self._height = size * 1.4 * 9/8, size * 1.4 * 9/8
+        self._width, self._height = size * 1.7, size * 1.7
         
         self._first_card_element.set_size(size)
         self._second_card_element.set_size(size)

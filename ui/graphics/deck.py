@@ -88,7 +88,7 @@ class DeckDisplayedElement(GameDisplayedElement):
         if self._last_displayed_card.get_character():
             last_card = CardDisplayedElement(self._last_displayed_card.get_character())
             last_card.set_position(x + w - h * 1/3, y + h / 2)
-            last_card.set_size(h)
+            last_card.set_size(h * 8/9)
             last_card.paint(painter, options, widget)
         
         self._animation_card.paint(painter, options, widget)
@@ -126,7 +126,7 @@ class DeckDisplayedElement(GameDisplayedElement):
             self._no_card.mousePressEvent(event)
     
     def get_size(self) -> int:
-        return self._height
+        return self._height * 8/9
     
     def set_position(self, x: int, y: int) -> None:
         self._x = x
