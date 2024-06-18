@@ -29,8 +29,8 @@ class MainDisplayedElement(GameDisplayedElement):
             x += self._size
     
     def set_rect(self, x: float, y: float, w: float, h: float) -> None:
-        self._x = x
-        self._y = y
+        self._x = 0
+        self._y = 0
         self._width = w
         self._height = h
     

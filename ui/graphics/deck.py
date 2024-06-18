@@ -79,9 +79,7 @@ class DeckDisplayedElement(GameDisplayedElement):
         x, y = self._x - self._width / 2, self._y - self._height / 2
         w, h = self._width, self._height
         
-        margin = self._height / 8
-        
-        painter.drawImage(_QtCore.QRectF(x-margin, y-margin, w + margin * 2, h + margin * 2), image.get_variant(""))
+        painter.drawImage(_QtCore.QRectF(x, y, w, h), image.get_variant(""))
         
         if self._count and self._last_card.get_character() is not None:
             self._no_card.set_position(x + h * 1/3, y + h / 2)
@@ -108,7 +106,7 @@ class DeckDisplayedElement(GameDisplayedElement):
         painter.drawText(_QtCore.QPoint(int(x + h * 1/3 - text_width/2), int(y + h/2 - text_height/2)), str(self._count))
     
     def set_size(self, size: int) -> None:
-        self._width, self._height = size * 3/2, size
+        self._width, self._height = size * 3/2 * 9/8, size * 9/8
         
         self._no_card.set_size(size)
         self._animation_card.set_size(size)

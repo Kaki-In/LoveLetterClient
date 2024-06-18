@@ -77,9 +77,7 @@ class PlayerDisplayedElement(GameDisplayedElement):
         w, h = self._width, self._height
         x, y = self._x - w/2, self._y - h/2
         
-        margin = self._height / 8
-        
-        painter.drawImage(_QtCore.QRectF(x-margin, y-margin, w + margin * 2, h + margin * 2), image.get_variant(""))
+        painter.drawImage(_QtCore.QRectF(x, y, w, h), image.get_variant(""))
         
         if self._first_card:
             self._first_card_element.paint(painter, options, widget)
@@ -101,7 +99,7 @@ class PlayerDisplayedElement(GameDisplayedElement):
     
     
     def set_size(self, size: int) -> None:
-        self._width, self._height = size * 1.4, size * 1.4
+        self._width, self._height = size * 1.4 * 9/8, size * 1.4 * 9/8
         
         self._first_card_element.set_size(size)
         self._second_card_element.set_size(size)

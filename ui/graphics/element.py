@@ -33,6 +33,11 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
         self.setAcceptHoverEvents(True)
         self.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.AllButtons)
         
+        blur = _QtWidgets.QGraphicsBlurEffect()
+        blur.setBlurRadius(1.1)
+        blur.setBlurHints(_QtWidgets.QGraphicsBlurEffect.BlurHint.QualityHint)
+        self.setGraphicsEffect(blur)
+        
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         pass
     
