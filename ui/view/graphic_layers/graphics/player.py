@@ -5,8 +5,8 @@ from PyQt5 import QtCore as _QtCore
 from .element import *
 from .card import *
 
-from ..resources.fonts import *
-from ..background_threads import *
+from ....resources.fonts import *
+from ....background_threads import *
 
 import love_letter as _love_letter
 import typing as _T

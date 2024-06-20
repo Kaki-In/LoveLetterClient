@@ -2,17 +2,14 @@ from PyQt5 import QtWidgets as _QtWidgets, uic as _uic
 from PyQt5 import QtCore as _QtCore
 from PyQt5 import QtGui as _QtGui
 
-from ..graphics.mouse import *
-from ..graphics.main_element import *
-from ..graphics.card import *
-from ..graphics.player import *
-from ..graphics.deck import *
-from ..graphics.button import *
-from ..graphics.text_input import *
+from .graphic_layers import *
+from .graphic_layers.graphics.main_element import *
+from .graphic_layers.graphics.mouse import *
 
-from ..controllers import *
+# from ..graphic_layers.controllers import *
 
 import love_letter as _love_letter
+import typing as _T
 
 class GameWidget(_QtWidgets.QGraphicsView):
     def __init__(self):
@@ -39,40 +36,35 @@ class GameWidget(_QtWidgets.QGraphicsView):
         self.setVerticalScrollBarPolicy(_QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(_QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         
-        button = ButtonDisplayedElement("Jouer")
-        self._scene.addItem(button)
+        self._layer: _T.Optional[GraphicLayer] = None
         
-        self._bcontrol = GraphicalButtonController(button)
-    
-        card = CardDisplayedElement(_love_letter.LOVE_LETTER_CHARACTER_BARON)
-        self._card_controller = GraphicalCardController(_love_letter.LoveLetterCard(_love_letter.LOVE_LETTER_CHARACTER_BARON), card)
-        self._scene.addItem(card)
-    
-        tinput = TextInputDisplayedElement("Bonjour")
-        tinput.set_position(0, 250)
-        self._scene.addItem(tinput)
-        
-        self._icontrol = GraphicalTextInputController(tinput)
-        
-        deck = DeckDisplayedElement(16, _love_letter.LoveLetterCard(None))
-        lldeck = _love_letter.LoveLetterDeck()
-        self._dcontrol = GraphicalDeckController(lldeck, deck)
-        
-        mapper = _love_letter.LoveLetterCharacterMapper.create_default_mapping()
-        for map in mapper.get_all_maps():
-            for c in range(map.get_count()):
-                lldeck.add_card(_love_letter.LoveLetterCard(map.get_character()))
-        
-        self._scene.addItem(deck)
+        self.displayLayer(FirstGraphicLayer())
     
     def onShow(self) -> None:
         self.resizeEvent()
+    
+    def displayLayer(self, layer: GraphicLayer) -> None:
+        if self._layer:
+            for item in self._layer.get_items():
+                self._scene.removeItem(item)
+                
+                item.stop_threads()
+        
+        for item in layer.get_items():
+            self._scene.addItem(item)
+            
+            item.start_threads()
+        
+        self._layer = layer
     
     def resizeEvent(self, event = None) -> None:
         w, h = self.width() - 2, self.height() - 2
         
         self.setSceneRect(-w / 2, -h / 2, w, h)
         self._main_graphic.set_rect(-w / 2, -h / 2, w, h)
+        
+        if self._layer is not None:
+            self._layer.set_rect(-w / 2, -h / 2, w, h)
     
     def mouseMoveEvent(self, event: _QtGui.QMouseEvent) -> None:
         super().mouseMoveEvent(event)

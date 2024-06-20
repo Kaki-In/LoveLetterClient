@@ -1,4 +1,4 @@
-from ..background_threads.linear_animation import *
+from ....background_threads.linear_animation import *
 from ..graphics.deck import *
 
 from PyQt5 import QtCore as _QtCore
@@ -26,15 +26,18 @@ class GraphicalDeckController():
         if self._element.animation_card().get_position_animations()[0].isRunning():
             return
         
-        self._cards.append(self._element.last_card())
+        if self._element.last_card().get_character() is not None:
+            self._cards.append(self._element.last_card())
         
-        if not len(self._deck):
+        if len(self._deck):
+            card = self._deck.take_card()
+            self._element.set_card(card)
+        else:
             for card in self._cards:
                 self._deck.add_card(card)
             self._cards = []
-        
-        card = self._deck.take_card()
-        self._element.set_card(card)
+            self._deck.shuffle()
+            self._element.set_card(_love_letter.LoveLetterCard(None))
         
     def on_deck_hover_enter(self, event: _QtWidgets.QGraphicsSceneMouseEvent) -> None:
         self._element.deck_card().go_to_size(self._element.get_size() * 6/7)

@@ -1,4 +1,4 @@
-from ..background_threads.linear_animation import *
+from ....background_threads.linear_animation import *
 from ..graphics.card import *
 
 from PyQt5 import QtCore as _QtCore

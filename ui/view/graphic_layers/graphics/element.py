@@ -5,8 +5,6 @@ from PyQt5 import QtCore as _QtCore
 import typing as _T
 import events as _events
 
-from ..resources.images import *
-
 class GameDisplayedElement(_QtWidgets.QGraphicsObject):
     
     signal_hover_enter = _QtCore.pyqtSignal(_QtWidgets.QGraphicsSceneHoverEvent)
@@ -33,9 +31,13 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
         self.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.AllButtons)
         
         self.setZValue(50)
-        
-        self.setFlags(self.GraphicsItemFlag.ItemIsMovable)
-        
+    
+    def start_threads(self):
+        pass
+    
+    def stop_threads(self):
+        pass
+    
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         pass
         

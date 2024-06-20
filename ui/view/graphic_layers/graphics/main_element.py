@@ -2,6 +2,8 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+from ....resources.images import *
+
 from .element import *
 
 class MainDisplayedElement(GameDisplayedElement):

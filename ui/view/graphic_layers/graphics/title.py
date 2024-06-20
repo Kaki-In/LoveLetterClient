@@ -4,7 +4,9 @@ from PyQt5 import QtCore as _QtCore
 
 from .element import *
 
-class MouseDisplayedElement(GameDisplayedElement):
+from ....resources.images import *
+
+class GameTitleDisplayedElement(GameDisplayedElement):
     def __init__(self, parent = None):
         super().__init__(0, 0, 50, 50, parent)
         
@@ -12,13 +14,14 @@ class MouseDisplayedElement(GameDisplayedElement):
         self.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.NoButton)
         
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
-        image_name = "mouse"
-        painter.drawImage(_QtCore.QRectF(0, 0, self._width, self._height), IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'))
+        w, h = self._width, self._height
+        x, y = self.x() - w/2, self.y() - h/2
+        
+        image_name = "game_title"
+        
+        painter.drawImage(_QtCore.QRectF(x, y, self._width, self._height), IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'))
     
     def set_size(self, size: int) -> None:
-        self._width, self._height = size, size
+        self._width, self._height = size *4/2.10, size
         self.prepareGeometryChange()
-    
-    def boundingRect(self) -> _QtCore.QRectF:
-        return _QtCore.QRectF(0, 0, self._width, self._height)
     

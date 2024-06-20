@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets as _QtWidgets, QtGui as _QtGui
 from .game import *
 from ..layouts import *
 
+from ..resources.images import *
 class MainWindow(_QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()

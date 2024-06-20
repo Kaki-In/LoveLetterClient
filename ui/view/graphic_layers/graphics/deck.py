@@ -5,8 +5,9 @@ from PyQt5 import QtCore as _QtCore
 from .element import *
 from .card import *
 
-from ..resources.fonts import *
-from ..background_threads import *
+from ....resources.fonts import *
+from ....resources.images import *
+from ....background_threads import *
 
 import love_letter as _love_letter
 import typing as _T
@@ -24,7 +25,6 @@ class DeckDisplayedElement(GameDisplayedElement):
         self._no_card = CardDisplayedElement(None, self)
         self._no_card.set_position(-self._width / 2 + self._height * 1/3, - self._height / 2 + self._height / 2)
         self._no_card.hide()
-        self._no_card.start_threads()
         
 #        self._return_animation = LinearAnimation()
 #        self._return_animation.signal_frame.connect(self.set_returned)
@@ -35,7 +35,6 @@ class DeckDisplayedElement(GameDisplayedElement):
         
         self._animation_card = CardDisplayedElement(None, self)
         self._animation_card.set_position(- self._width / 2 + self._height * 1/3, - self._height / 2 + self._height / 2)
-        self._animation_card.start_threads()
         self._animation_card.hide()
         self._animation_card.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.NoButton)
         self._animation_card.setAcceptHoverEvents(False)
@@ -51,7 +50,15 @@ class DeckDisplayedElement(GameDisplayedElement):
         self._animation_card.setAcceptHoverEvents(False)
         
         self._deck_selected = False
-        
+    
+    def start_threads(self):
+        self._no_card.start_threads()
+        self._animation_card.start_threads()
+    
+    def stop_threads(self):
+        self._no_card.stop_threads()
+        self._animation_card.stop_threads()
+    
     def deck_card(self) -> CardDisplayedElement:
         return self._no_card
     
