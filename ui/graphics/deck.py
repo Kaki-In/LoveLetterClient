@@ -21,10 +21,10 @@ class DeckDisplayedElement(GameDisplayedElement):
         
         self._count = count
         
-        self._no_card = CardDisplayedElement(None)
-        self._no_card.set_position(self._x - self._width / 2 + self._height * 1/3, self._y - self._height / 2 + self._height / 2)
-        
-        self._no_card.setZValue(self.zValue() - 1)
+        self._no_card = CardDisplayedElement(None, self)
+        self._no_card.set_position(-self._width / 2 + self._height * 1/3, - self._height / 2 + self._height / 2)
+        self._no_card.hide()
+        self._no_card.start_threads()
         
 #        self._return_animation = LinearAnimation()
 #        self._return_animation.signal_frame.connect(self.set_returned)
@@ -33,23 +33,34 @@ class DeckDisplayedElement(GameDisplayedElement):
 #        
         self._return_state = 1
         
-        self._animation_card = CardDisplayedElement(None)
-        self._animation_card.signal_update.connect(self.update)
-        self._animation_card.set_position(self._x - self._width / 2 + self._height * 1/3, self._y - self._height / 2 + self._height / 2)
+        self._animation_card = CardDisplayedElement(None, self)
+        self._animation_card.set_position(- self._width / 2 + self._height * 1/3, - self._height / 2 + self._height / 2)
         self._animation_card.start_threads()
+        self._animation_card.hide()
+        self._animation_card.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.NoButton)
+        self._animation_card.setAcceptHoverEvents(False)
         
         self._animation_card.setZValue(self.zValue() - 1)
         
+        self._animation_above_deck = True
+        
+        self._no_card.signal_update.connect(self.update)
+        self._animation_card.signal_update.connect(self.update)
         
         self._animation_card.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.NoButton)
         self._animation_card.setAcceptHoverEvents(False)
-    
+        
+        self._deck_selected = False
+        
     def deck_card(self) -> CardDisplayedElement:
         return self._no_card
     
+    def animation_card(self) -> CardDisplayedElement:
+        return self._animation_card
+    
     def set_card(self, card: _love_letter.LoveLetterCard):
         w, h = self._width, self._height
-        x, y = self._x - w/2, self._y - h/2
+        x, y = -w/2, -h/2
         
         self._last_card = card
         
@@ -58,14 +69,21 @@ class DeckDisplayedElement(GameDisplayedElement):
             
             self._animation_card._character = None
             self._animation_card.set_character(card.get_character(), 0.4)
+            self._animation_card.set_size(self.get_size() * 6/7)
+            self._animation_card.go_to_size(self.get_size())
             self._animation_card.set_position(x + h * 1/3, y + h / 2)
             self._animation_card.go_to_position(x + w - h * 1/3, y + h / 2, 1)
+            self._animation_above_deck = False
+        
         else:
             self._last_displayed_card.set_character(None)
             
             self._animation_card.set_character(card.get_character(), 0.2)
+            self._animation_card.set_size(self.get_size())
+            self._animation_card.go_to_size(self.get_size() * 6/7)
             self._animation_card.set_position(x + w - h * 1/3, y + h / 2)
             self._animation_card.go_to_position(x + h * 1/3, y + h / 2, 0.5)
+            self._animation_above_deck = True
         
     def last_card(self):
         return self._last_card
@@ -76,22 +94,23 @@ class DeckDisplayedElement(GameDisplayedElement):
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         image = IMAGES_MAPPER.get_image_by_name("deck")
         
-        x, y = self._x - self._width / 2, self._y - self._height / 2
+        x, y = -self._width / 2, -self._height / 2
         w, h = self._width, self._height
         
         painter.drawImage(_QtCore.QRectF(x, y, w, h), image.get_variant(""))
         
-        if self._count and self._last_card.get_character() is not None:
+        if self._count and not (self._animation_above_deck and self._animation_card.get_position_animations()[0].isRunning()):
             self._no_card.set_position(x + h * 1/3, y + h / 2)
-            self._no_card.paint(painter, options, widget)
+            self.paintChild(self._no_card, painter, options, widget)
         
         if self._last_displayed_card.get_character():
             last_card = CardDisplayedElement(self._last_displayed_card.get_character())
             last_card.set_position(x + w - h * 1/3, y + h / 2)
             last_card.set_size(h * 8/9)
-            last_card.paint(painter, options, widget)
+            self.paintChild(last_card, painter, options, widget)
         
-        self._animation_card.paint(painter, options, widget)
+        if not self._animation_above_deck or self._animation_card.get_position_animations()[0].isRunning():
+            self.paintChild(self._animation_card, painter, options, widget)
         
         font = _QtGui.QFont("Chomsky", int(self._width * 10/100))
         fm = _QtGui.QFontMetrics(font)
@@ -111,30 +130,40 @@ class DeckDisplayedElement(GameDisplayedElement):
         self._no_card.set_size(size)
         self._animation_card.set_size(size)
         
-        self._animation_card.set_position(self._x - self._width / 2 + self._height * 1/3, self._y - self._height / 2 + self._height / 2)
-        self._no_card.set_position(self._x - self._width / 2 + self._height * 1/3, self._y - self._height / 2 + self._height / 2)
+        self._animation_card.set_position(- self._width / 2 + self._height * 1/3, - self._height / 2 + self._height / 2)
+        self._no_card.set_position(- self._width / 2 + self._height * 1/3, - self._height / 2 + self._height / 2)
         
         self.scene().update()
     
-#    def go_to_size(self, size: int) -> None:
-#        self._size_animation.start_transition(self.get_size(), size, 0.3)
-    
     def mousePressEvent(self, event: _QtWidgets.QGraphicsSceneMouseEvent) -> None:
         self.signal_mouse_press.emit(event)
-        rect = self._no_card.boundingRect()
-        if rect.contains(event.pos()):
+        rect = _QtCore.QRectF(self._no_card.boundingRect())
+        
+        if _QtCore.QRectF(rect.x() + self._no_card.x(), rect.y() + self._no_card.y(), rect.width(), rect.height()).contains(event.pos()):
             self._no_card.mousePressEvent(event)
+        
+        super().mousePressEvent(event)
+    
+    def hoverMoveEvent(self, event: _QtWidgets.QGraphicsSceneMouseEvent) -> None:
+        rect = _QtCore.QRectF(self._no_card.boundingRect())
+        
+        if _QtCore.QRectF(rect.x() + self._no_card.x(), rect.y() + self._no_card.y(), rect.width(), rect.height()).contains(event.pos()):
+            if not self._deck_selected:
+                self._no_card.hoverEnterEvent(event)
+                self._deck_selected = True
+        
+        elif self._deck_selected:
+            self._no_card.hoverLeaveEvent(event)
+            self._deck_selected = False
+        super().hoverMoveEvent(event)
+    
+    def hoverLeaveEvent(self, event: _QtWidgets.QGraphicsSceneMouseEvent) -> None:
+        if self._deck_selected:
+            self._no_card.hoverLeaveEvent(event)
+            self._deck_selected = False
+        super().hoverLeaveEvent(event)
     
     def get_size(self) -> int:
         return self._height * 8/9
-    
-    def set_position(self, x: int, y: int) -> None:
-        self._x = x
-        self._y = y
-        
-        self._animation_card.set_position(self._x - self._width / 2 + self._height * 1/3, self._y - self._height / 2 + self._height / 2)
-        self._no_card.set_position(self._x - self._width / 2 + self._height * 1/3, self._y - self._height / 2 + self._height / 2)
-        
-        self.update()
     
 

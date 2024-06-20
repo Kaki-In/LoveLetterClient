@@ -10,22 +10,15 @@ class MouseDisplayedElement(GameDisplayedElement):
         
         self.setAcceptHoverEvents(False)
         self.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.NoButton)
-    
+        
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         image_name = "mouse"
-        painter.drawImage(_QtCore.QRectF(self._x, self._y, self._width, self._height), IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'))
+        painter.drawImage(_QtCore.QRectF(0, 0, self._width, self._height), IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'))
     
     def set_size(self, size: int) -> None:
         self._width, self._height = size, size
+        self.prepareGeometryChange()
     
-    def hoverMoveEvent(self, event: _QtGui.QHoverEvent) -> None:
-        event.ignore()
+    def boundingRect(self) -> _QtCore.QRectF:
+        return _QtCore.QRectF(0, 0, self._width, self._height)
     
-    def mousePressEvent(self, event):
-        event.ignore()
-        
-    def set_position(self, x: int, y: int) -> None:
-        self._x = x
-        self._y = y
-    
-

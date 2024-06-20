@@ -5,7 +5,7 @@ from PyQt5 import QtCore as _QtCore
 import love_letter as _love_letter
 import random as _random
 
-class GraphicalDeckController():
+class GraphicalPlayerController():
     def __init__(self, player: _love_letter.LoveLetterPlayer, view: PlayerDisplayedElement):
         self._player = player
         

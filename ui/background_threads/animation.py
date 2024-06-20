@@ -19,6 +19,8 @@ class Animation(_QtCore.QObject):
         self._thread.finished.connect(self.deleteLater)
         self.signal_stopped.connect(self._thread.quit)
         self.signal_stopped.connect(self.deleteLater)
+        
+        self._runs = False
     
     def stop(self):
         self._must_stop = True
@@ -30,20 +32,32 @@ class Animation(_QtCore.QObject):
     def run(self):
         while not self._must_stop:
             if not self._values:
+                self._runs = False
                 _time.sleep(0.1)
                 continue
             
+            self._runs = True
             value = self._values.pop(0)
             
             t = _time.monotonic()
             
             while _time.monotonic() - t <= value[2] and (self._one_by_one or not self._values) and not self._must_stop:
-                self.signal_frame.emit(self.change(value[0], value[1], (_time.monotonic() - t) / value[2]))
+                try:
+                    self.signal_frame.emit(self.change(value[0], value[1], (_time.monotonic() - t) / value[2]))
+                except:
+                    pass
                 _time.sleep(0.05)
             if self._one_by_one or not (self._values or self._must_stop):
-                self.signal_frame.emit(value[1])
+                try:
+                    self.signal_frame.emit(value[1])
+                except:
+                    pass
+        
         print("Ended")
         self._thread.quit()
+    
+    def isRunning(self) -> bool:
+        return self._runs or self._values
     
     def set_one_by_one(self, mode):
         self._one_by_one = bool(mode)

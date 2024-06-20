@@ -22,39 +22,37 @@ class PlayerDisplayedElement(GameDisplayedElement):
         self._name = name
         
         if first_card:
-            self._first_card_element = CardDisplayedElement(first_card.get_character())
+            self._first_card_element = CardDisplayedElement(first_card.get_character(), self)
         else:
-            self._first_card_element = CardDisplayedElement(None)
+            self._first_card_element = CardDisplayedElement(None, self)
         
         if second_card:
-            self._second_card_element = CardDisplayedElement(second_card.get_character())
+            self._second_card_element = CardDisplayedElement(second_card.get_character(), self)
         else:
-            self._second_card_element = CardDisplayedElement(None)
+            self._second_card_element = CardDisplayedElement(None, self)
         
         self._first_card_element.start_threads()
         self._second_card_element.start_threads()
-        
-        self._first_card_element.signal_update.connect(self.update)
-        self._second_card_element.signal_update.connect(self.update)
         
         self.update_card_position()
     
     def update_card_position(self):
         if self._first_card:
-            self._second_card_element.go_to_position(self._x - 7 * self._width/32, self._y)
+            self._second_card_element.go_to_position(self.x() - 7 * self._width/32, self.y())
         else:
-            self._second_card_element.go_to_position(self._x, self._y)
+            self._second_card_element.go_to_position(self.x(), self.y())
         
         if self._second_card:
-            self._first_card_element.go_to_position(self._x + 7 * self._width/32, self._y)
+            self._first_card_element.go_to_position(self.x() + 7 * self._width/32, self.y())
         else:
-            self._first_card_element.go_to_position(self._x, self._y)
+            self._first_card_element.go_to_position(self.x(), self.y())
         
+        self.prepareGeometryChange()
         self.update()
     
     def set_first_card(self, card: _love_letter.LoveLetterCard):
         w, h = self._width, self._height
-        x, y = self._x - w/2, self._y - h/2
+        x, y = self.x() - w/2, self.y() - h/2
         
         self._first_card = card
         
@@ -80,10 +78,14 @@ class PlayerDisplayedElement(GameDisplayedElement):
         painter.drawImage(_QtCore.QRectF(x, y, w, h), image.get_variant(""))
         
         if self._first_card:
-            self._first_card_element.paint(painter, options, widget)
+            self._first_card_element.show()
+        else:
+            self._first_card_element.hide()
         
         if self._second_card:
-            self._second_card_element.paint(painter, options, widget)
+            self._second_card_element.show()
+        else:
+            self._second_card_element.hide()
         
         font = _QtGui.QFont("Chomsky", int(self._width * 10/100))
         fm = _QtGui.QFontMetrics(font)
@@ -111,11 +113,4 @@ class PlayerDisplayedElement(GameDisplayedElement):
     
     def get_size(self) -> int:
         return self._height / 1.6
-    
-    def set_position(self, x: int, y: int) -> None:
-        self._x = x
-        self._y = y
-        
-        self.update_card_position()
-    
 

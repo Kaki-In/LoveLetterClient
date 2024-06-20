@@ -7,6 +7,8 @@ from ..graphics.main_element import *
 from ..graphics.card import *
 from ..graphics.player import *
 from ..graphics.deck import *
+from ..graphics.button import *
+from ..graphics.text_input import *
 
 from ..controllers import *
 
@@ -21,7 +23,7 @@ class GameWidget(_QtWidgets.QGraphicsView):
         self.setScene(self._scene)
         
         self._main_graphic = MainDisplayedElement()
-        self._main_graphic.setZValue(-10)
+        self._main_graphic.setZValue(0)
         self._scene.addItem(self._main_graphic)
         
         self._mouse = MouseDisplayedElement()
@@ -37,37 +39,33 @@ class GameWidget(_QtWidgets.QGraphicsView):
         self.setVerticalScrollBarPolicy(_QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(_QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         
-        self._controllers = []
+        button = ButtonDisplayedElement("Jouer")
+        self._scene.addItem(button)
         
-        player1 = PlayerDisplayedElement(_love_letter.LoveLetterCard(_love_letter.LOVE_LETTER_CHARACTER_BARON), _love_letter.LoveLetterCard(_love_letter.LOVE_LETTER_CHARACTER_PRINCESS), "Blop")
-        player2 = PlayerDisplayedElement(_love_letter.LoveLetterCard(None), None, "Test")
+        self._bcontrol = GraphicalButtonController(button)
+    
+        card = CardDisplayedElement(_love_letter.LOVE_LETTER_CHARACTER_BARON)
+        self._card_controller = GraphicalCardController(_love_letter.LoveLetterCard(_love_letter.LOVE_LETTER_CHARACTER_BARON), card)
+        self._scene.addItem(card)
+    
+        tinput = TextInputDisplayedElement("Bonjour")
+        tinput.set_position(0, 250)
+        self._scene.addItem(tinput)
         
-        self._scene.addItem(player1)
-        self._scene.addItem(player2)
+        self._icontrol = GraphicalTextInputController(tinput)
         
-        player1.set_position(-500, 0)
-        player1.set_size(200)
+        deck = DeckDisplayedElement(16, _love_letter.LoveLetterCard(None))
+        lldeck = _love_letter.LoveLetterDeck()
+        self._dcontrol = GraphicalDeckController(lldeck, deck)
         
-        player2.set_position(500, 0)
-        player2.set_size(200)
-
-        deck = DeckDisplayedElement(10, _love_letter.LoveLetterCard(None))
-        
-        map = _love_letter.LoveLetterCharacterMapper.create_default_mapping()
-        d = _love_letter.LoveLetterDeck()
-        
-        for elem in map.get_all_maps():
-            for c in range(elem.get_count()):
-                d.add_card(_love_letter.LoveLetterCard(elem.get_character()))
-        
-        self._controllers.append(GraphicalDeckController(d, deck))
+        mapper = _love_letter.LoveLetterCharacterMapper.create_default_mapping()
+        for map in mapper.get_all_maps():
+            for c in range(map.get_count()):
+                lldeck.add_card(_love_letter.LoveLetterCard(map.get_character()))
         
         self._scene.addItem(deck)
-
-        deck.set_position(0, 300)
-        deck.set_size(200)
-        
-    def onShow(self):
+    
+    def onShow(self) -> None:
         self.resizeEvent()
     
     def resizeEvent(self, event = None) -> None:
@@ -88,6 +86,4 @@ class GameWidget(_QtWidgets.QGraphicsView):
         
         x, y = position.x(), position.y()
         self._mouse.set_position(x, y)
-        
-        self._scene.update()
         

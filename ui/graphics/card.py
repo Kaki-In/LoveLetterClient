@@ -37,9 +37,18 @@ class CardDisplayedElement(GameDisplayedElement):
         
         self._return_state = 1
         self._new_characters = []
-    
+        
     def get_character(self):
         return self._character
+    
+    def get_size_animation(self):
+        return self._size_animation
+    
+    def get_position_animations(self):
+        return self._position_animation_x, self._position_animation_y
+    
+    def get_return_animation(self):
+        return self._return_animation
     
     def start_threads(self):
         self._size_animation.get_thread().start()
@@ -64,17 +73,10 @@ class CardDisplayedElement(GameDisplayedElement):
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         w, h = int(self._width) + 2, int(self._height) + 2
         
-#        if self._return_state == 1:
-#            w, h = self._width, self._height
-#        elif self._return_state < 0:
-#            w, h = self._width * (-self._return_state), self._height
-#        else:
-#            w, h = self._width * (self._return_state), self._height
-        
         character = self._character
         
-        x = self._x - w / 2
-        y = self._y - h / 2
+        x = -w / 2
+        y = -h / 2
         
         card_pixmap = _QtGui.QPixmap(w, h)
         card_pixmap.fill(_QtGui.QColor.fromRgba(0))
@@ -95,7 +97,11 @@ class CardDisplayedElement(GameDisplayedElement):
             image_card = IMAGES_MAPPER.get_image_by_name("card").get_variant("front")
             image_name = "character_" + character.get_name().lower()
             
-            card_painter.drawImage(_QtCore.QRectF(w * 5/100 - w/2, h * 10/100 - h/2, w * 90/100, h * 85/100), IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'))
+            blur = _QtWidgets.QGraphicsBlurEffect()
+            blur.setBlurRadius(2)
+            blur.setBlurHints(_QtWidgets.QGraphicsBlurEffect.BlurHint.PerformanceHint)
+            
+            card_painter.drawImage(_QtCore.QRectF(w * 5/100 - w/2, h * 10/100 - h/2, w * 90/100, h * 85/100), self.applyEffectToImage(IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'), blur))
             card_painter.drawImage(_QtCore.QRectF(-w/2, -h/2, w, h), image_card)
             
             font = _QtGui.QFont("Chomsky", int(self._width * 10/100))
@@ -117,6 +123,7 @@ class CardDisplayedElement(GameDisplayedElement):
     
     def set_size(self, size: int) -> None:
         self._width, self._height = size * 2/3, size
+        self.prepareGeometryChange()
         self.update()
     
     def go_to_size(self, size: int, time: float = 0.3) -> None:
@@ -125,28 +132,9 @@ class CardDisplayedElement(GameDisplayedElement):
     def get_size(self) -> int:
         return self._height
     
-    def set_position(self, x: int, y: int) -> None:
-        self._x = x
-        self._y = y
-        self.update()
-    
-    def set_position_x(self, x: int) -> None:
-        self._x = x
-        self.update()
-    
-    def set_position_y(self, y: int) -> None:
-        self._y = y
-        self.update()
-    
     def go_to_position(self, x: int, y: int, time: float = 0.5) -> None:
-        self._position_animation_x.start_transition(self._x, x, time)
-        self._position_animation_y.start_transition(self._y, y, time)
-    
-    def boundingRect(self) -> _QtCore.QRectF:
-        x = self._x - self._width / 2
-        y = self._y - self._height / 2
-        
-        return _QtCore.QRectF(x, y, self._width, self._height)
+        self._position_animation_x.start_transition(self.x(), x, time)
+        self._position_animation_y.start_transition(self.y(), y, time)
     
     def stop_threads(self):
         self._size_animation.stop()
