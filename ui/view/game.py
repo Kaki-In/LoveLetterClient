@@ -3,10 +3,13 @@ from PyQt5 import QtCore as _QtCore
 from PyQt5 import QtGui as _QtGui
 
 from .graphic_layers import *
+from .palette import *
 from .graphic_layers.graphics.main_element import *
 from .graphic_layers.graphics.mouse import *
 
 # from ..graphic_layers.controllers import *
+from .layer_controllers.first_controller import *
+#from .layer_controllers.game_controller import *
 
 import love_letter as _love_letter
 import typing as _T
@@ -18,6 +21,8 @@ class GameWidget(_QtWidgets.QGraphicsView):
         self._scene: _QtWidgets.QGraphicsScene = _QtWidgets.QGraphicsScene()
         
         self.setScene(self._scene)
+        
+        self._scene.setPalette(CustomPalette())
         
         self._main_graphic = MainDisplayedElement()
         self._main_graphic.setZValue(0)
@@ -38,7 +43,26 @@ class GameWidget(_QtWidgets.QGraphicsView):
         
         self._layer: _T.Optional[GraphicLayer] = None
         
-        self.displayLayer(FirstGraphicLayer())
+        players: list[_love_letter.LoveLetterPlayer]= []
+        players.append(_love_letter.LoveLetterPlayer(1, "Bob"))
+        players.append(_love_letter.LoveLetterPlayer(2, "Kaki In"))
+        players.append(_love_letter.LoveLetterPlayer(3, "Georges"))
+        players.append(_love_letter.LoveLetterPlayer(4, "Michel"))
+        
+        game = _love_letter.LoveLetterGame(*players)
+        rules = _love_letter.LoveLetterGameRules(None, _love_letter.LoveLetterCharacterMapper.create_default_mapping())
+        
+        deck = rules.create_new_deck()
+        game.init_new_round(deck)
+        
+        round = game.get_actual_round()
+        _love_letter.LoveLetterRoundRule().prepare(round)
+        
+        players[0].take_card(deck.take_card())
+        
+        layer = RoundGraphicLayer(round.get_players(), round.get_active_player(), deck)
+#        self._controller = GameGraphicLayerController(layer)
+        self.displayLayer(layer)
     
     def onShow(self) -> None:
         self.resizeEvent()

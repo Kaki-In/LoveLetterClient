@@ -18,15 +18,18 @@ class GraphicalDeckController():
         self._element.deck_card().signal_mouse_press.connect(self.on_deck_pressed)
         self._element.deck_card().signal_hover_enter.connect(self.on_deck_hover_enter)
         self._element.deck_card().signal_hover_leave.connect(self.on_deck_hover_leave)
+        
+        self._element.set_card(None)
+        self._element.set_number(len(self._deck))
     
-    def on_deck_number_changed(self, card: _love_letter.LoveLetterCard):
+    def on_deck_number_changed(self, card: _love_letter.LoveLetterCard) -> None:
         self._element.set_number(len(self._deck))
     
     def on_deck_pressed(self) -> None:
         if self._element.animation_card().get_position_animations()[0].isRunning():
             return
         
-        if self._element.last_card().get_character() is not None:
+        if self._element.last_card() is not None:
             self._cards.append(self._element.last_card())
         
         if len(self._deck):
@@ -37,7 +40,7 @@ class GraphicalDeckController():
                 self._deck.add_card(card)
             self._cards = []
             self._deck.shuffle()
-            self._element.set_card(_love_letter.LoveLetterCard(None))
+            self._element.set_card(None)
         
     def on_deck_hover_enter(self, event: _QtWidgets.QGraphicsSceneMouseEvent) -> None:
         self._element.deck_card().go_to_size(self._element.get_size() * 6/7)

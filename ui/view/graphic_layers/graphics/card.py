@@ -61,6 +61,9 @@ class CardDisplayedElement(GameDisplayedElement):
         self._new_characters.append(character)
         self._return_animation.start_transition( -1, 1, time)
     
+    def change_character(self, character: _love_letter.LoveLetterCharacter):
+        self._character = character
+    
     def set_returned(self, value: float):
         self._return_state = value
         
@@ -141,4 +144,5 @@ class CardDisplayedElement(GameDisplayedElement):
         self._size_animation.stop()
         self._position_animation_x.stop()
         self._position_animation_y.stop()
+        self._return_animation.stop()
 

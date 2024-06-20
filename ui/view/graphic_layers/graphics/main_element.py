@@ -10,23 +10,30 @@ class MainDisplayedElement(GameDisplayedElement):
     def __init__(self, parent=None):
         super().__init__(0, 0, 0, 0)
         
-        self._size = 150
+        self._size = 300
         
         self.setAcceptHoverEvents(False)
         self.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.NoButton)
         
+        image_name = "background"
+        
         blur_effect = _QtWidgets.QGraphicsBlurEffect()
-        blur_effect.setBlurRadius(20)
+        blur_effect.setBlurRadius(5)
         blur_effect.setBlurHints(blur_effect.BlurHint.AnimationHint)
         
-        image_name = "background"
-        self._background_image = self.applyEffectToImage(IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'), blur_effect)
+        self._background_image_light = self.applyEffectToImage(IMAGES_MAPPER.get_image_by_name(image_name).get_variant('light'), blur_effect)
+        
+        blur_effect = _QtWidgets.QGraphicsBlurEffect()
+        blur_effect.setBlurRadius(5)
+        blur_effect.setBlurHints(blur_effect.BlurHint.AnimationHint)
+        
+        self._background_image_dark = self.applyEffectToImage(IMAGES_MAPPER.get_image_by_name(image_name).get_variant('light'), blur_effect)
         
 #        self.setGraphicsEffect(blur_effect)
         
     
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
-        image = self._background_image
+        image = self._background_image_dark if options.palette.dark_mode_is_enabled() else self._background_image_light
         
         cx = self._width/2
         cy = self._height/2
@@ -35,10 +42,10 @@ class MainDisplayedElement(GameDisplayedElement):
         while x - self._size <= self._width / 2:
             y = 0
             while y - self._size <= self._height / 2:
-                painter.drawImage(_QtCore.QRectF(cx + x, cy + y, self._size + 2, self._size + 2), image)
-                painter.drawImage(_QtCore.QRectF(cx-x-self._size, cy + y, self._size + 2, self._size + 2), image)
-                painter.drawImage(_QtCore.QRectF(cx + x, cy-y-self._size, self._size + 2, self._size + 2), image)
-                painter.drawImage(_QtCore.QRectF(cx-x-self._size, cy-y-self._size, self._size + 2, self._size + 2), image)
+                painter.drawImage(_QtCore.QRectF(cx + x, cy + y, self._size + 1, self._size + 1), image)
+                painter.drawImage(_QtCore.QRectF(cx-x-self._size, cy + y, self._size + 1, self._size + 1), image)
+                painter.drawImage(_QtCore.QRectF(cx + x, cy-y-self._size, self._size + 1, self._size + 1), image)
+                painter.drawImage(_QtCore.QRectF(cx-x-self._size, cy-y-self._size, self._size + 1, self._size + 1), image)
                 y += self._size
             x += self._size
     
@@ -51,6 +58,8 @@ class MainDisplayedElement(GameDisplayedElement):
         
         self._width = w
         self._height = h
+        
+        self._size = (w + h) / 10
         
         self.prepareGeometryChange()
     

@@ -16,6 +16,8 @@ class GraphicalCardController():
         self._element.signal_hover_enter.connect(self.on_card_hover_enter)
         self._element.signal_hover_leave.connect(self.on_card_hover_leave)
         self._element.signal_mouse_press.connect(self.on_card_pressed)
+        
+        self._element.change_character(self._card.get_character())
     
     def on_card_character_changed(self, character: _love_letter.LoveLetterCharacter):
         self._element.set_character(character)

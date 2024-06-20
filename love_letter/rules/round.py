@@ -10,7 +10,7 @@ class LoveLetterRoundRule():
     def __init__(self):
         self._players_rule = LoveLetterPlayerTurnRule()
     
-    async def main_round(self, mapper: LoveLetterCharacterMapper, notifier: LoveLetterNotifier, round: LoveLetterRound) -> None:
+    def prepare(self, round: LoveLetterRound):
         round.get_deck().shuffle()
         
         players = round.get_players()
@@ -25,6 +25,8 @@ class LoveLetterRoundRule():
             player.initialize_for_round()
             player.take_card(round.get_deck().take_card())
     
+    async def main_round(self, mapper: LoveLetterCharacterMapper, notifier: LoveLetterNotifier, round: LoveLetterRound) -> None:
+        self.prepare(round)
         while not self.is_finished(round):
             await self._players_rule.play(mapper, notifier, round)
             round.select_next_player()

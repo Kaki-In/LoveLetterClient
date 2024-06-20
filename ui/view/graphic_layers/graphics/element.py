@@ -115,5 +115,9 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
         painter.setTransform(child_transform)
         child.paint(painter, options, widget)
         painter.setTransform(transform)
-        
+    
+    def shape(self):
+        path = _QtGui.QPainterPath()
+        path.addRect(self.boundingRect())
+        return path
 

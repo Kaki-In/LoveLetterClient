@@ -15,7 +15,7 @@ class MouseDisplayedElement(GameDisplayedElement):
         
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         image_name = "mouse"
-        painter.drawImage(_QtCore.QRectF(0, 0, self._width, self._height), IMAGES_MAPPER.get_image_by_name(image_name).get_variant('dark'))
+        painter.drawImage(_QtCore.QRectF(0, 0, self._width, self._height), IMAGES_MAPPER.get_image_by_name(image_name).get_variant('light'))
     
     def set_size(self, size: int) -> None:
         self._width, self._height = size, size

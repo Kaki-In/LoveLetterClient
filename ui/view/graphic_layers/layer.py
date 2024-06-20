@@ -1,8 +1,10 @@
 from .graphics import *
 
-class GraphicLayer():
+from PyQt5 import QtCore as _QtCore
+
+class GraphicLayer(_QtCore.QObject):
     def __init__(self):
-        pass
+        super().__init__()
     
     def get_items(self) -> list[ GameDisplayedElement ]:
         return []

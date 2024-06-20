@@ -40,13 +40,18 @@ class ButtonDisplayedElement(GameDisplayedElement):
     
     def enable(self) -> None:
         self._enabled = True
+        self.update()
     
     def disable(self) -> None:
         self._enabled = False
+        self.update()
     
     def mousePressEvent(self, event: _QtWidgets.QGraphicsSceneMouseEvent) -> None:
-        super().mousePressEvent(event)
-        event.accept()
+        if self._enabled:
+            super().mousePressEvent(event)
+            event.accept()
+        else:
+            event.ignore()
     
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         r = self.boundingRect()

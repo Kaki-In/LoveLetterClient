@@ -8,6 +8,8 @@ from ....resources import *
 from ....background_threads.exponential_animation import *
 
 class TextInputDisplayedElement(GameDisplayedElement):
+    signal_text_changed = _QtCore.pyqtSignal(str)
+    
     def __init__(self, text: str, parent = None):
         super().__init__(0, 0, 250, 50, parent)
         
@@ -70,6 +72,7 @@ class TextInputDisplayedElement(GameDisplayedElement):
     
     def set_text(self, text: str) -> None:
         self._text = text
+        self.signal_text_changed.emit(text)
         self.prepareGeometryChange()
     
     def start_blinking(self) -> None:
