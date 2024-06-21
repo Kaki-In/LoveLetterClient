@@ -31,6 +31,14 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
         self.setAcceptedMouseButtons(_QtCore.Qt.MouseButton.AllButtons)
         
         self.setZValue(50)
+        
+        self._dark_mode = False
+    
+    def set_dark_mode(self, enabled: bool) -> None:
+        self._dark_mode = enabled
+    
+    def dark_mode_enabled(self) -> bool:
+        return self._dark_mode
     
     def start_threads(self):
         pass

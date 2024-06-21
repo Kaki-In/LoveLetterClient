@@ -3,7 +3,6 @@ from PyQt5 import QtCore as _QtCore
 from PyQt5 import QtGui as _QtGui
 
 from .graphic_layers import *
-from .palette import *
 from .graphic_layers.graphics.main_element import *
 from .graphic_layers.graphics.mouse import *
 
@@ -13,6 +12,7 @@ from .layer_controllers.first_controller import *
 
 import love_letter as _love_letter
 import typing as _T
+import darkdetect as _dark_detect
 
 class GameWidget(_QtWidgets.QGraphicsView):
     def __init__(self):
@@ -63,9 +63,17 @@ class GameWidget(_QtWidgets.QGraphicsView):
         layer = RoundGraphicLayer(round.get_players(), round.get_active_player(), deck)
 #        self._controller = GameGraphicLayerController(layer)
         self.displayLayer(layer)
+        
+        self._dark_mode_enabled = _dark_detect.isDark( )
     
     def onShow(self) -> None:
         self.resizeEvent()
+    
+    def set_dark_mode(self, enabled: bool) -> None:
+        self._dark_mode_enabled = enabled
+    
+    def dark_mode_enabled(self) -> bool:
+        return self._dark_mode_enabled
     
     def displayLayer(self, layer: GraphicLayer) -> None:
         if self._layer:
