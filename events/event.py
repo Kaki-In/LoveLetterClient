@@ -1,12 +1,25 @@
 from threading import Thread
+from PyQt5 import QtCore as _QtCore
+import typing as _T
 
-class EventHandler():
+class Event():
+    def __init__(self, *values):
+        self._values = values
+    
+    def values(self) -> tuple[_T.Any, ...]:
+        return self._values
+
+class EventHandler(_QtCore.QObject):
+    _signal = _QtCore.pyqtSignal(Event)
+
     def __init__(self):
+        super().__init__()
+
         self._functions = []
     
     def addEventFunction(self, func):
-        self._functions.append(func)
+        self._signal.connect(func)
     
     def emit(self, *values):
-        for func in self._functions:
-            Thread(target = func, args = values).start()
+        self._signal.emit(Event(*values))
+

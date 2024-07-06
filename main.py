@@ -1,17 +1,15 @@
 #!/usr/bin/python3
 
 from love_letter import *
-from ui import *
+from main_platform import *
 
 import sys
 
 from PyQt5.QtWidgets import QApplication
 
 def test_view(full):
-    app = QApplication([''])
-    fen = MainWindow()
-    fen.set_full_screen_mode(full)
-    return app.exec()
+    activity = MainActivity()
+    activity.main()
 
 def main(args):
     if '--test-view' in args:

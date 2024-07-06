@@ -18,7 +18,17 @@ class EventObject(_T.Generic[_KeyType]):
     def getEvent(self, name: _KeyType) -> EventHandler:
         return self.__events[ name ]
     
+    def create_event(self, name: str) -> None:
+        self.__events[name] = EventHandler()
+    
+    def create_events(self, *names) -> None:
+        for name in names:
+            self.create_event(name)
+    
     def __getitem__(self, name: _KeyType) -> EventHandler:
-        return self.__events[ name ]
+        return self.getEvent(name)
+    
+    def __iter__(self) -> _T.Iterator:
+        return iter(self.__events)
     
 
