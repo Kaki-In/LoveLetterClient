@@ -5,7 +5,7 @@ import os as _os
 class SettingsDirectory():
     def __init__(self, directory_path: str):
         self._path = directory_path
-        self._files: dict[str, SettingsFile] = []
+        self._files: dict[str, SettingsFile] = {}
         self._dirs: dict[str, SettingsDirectory] = {}
 
         if not _os.path.exists(self._path):
@@ -18,7 +18,19 @@ class SettingsDirectory():
                 self._dirs[sub_item] = SettingsDirectory(abs_item)
 
             elif _os.path.isfile(abs_item) and abs_item.endswith('.settings'):
-                self._files[sub_item] = SettingsFile(abs_item)
+                self._files[sub_item[:-len('.settings')]] = SettingsFile(abs_item)
+    
+    def has_directory(self, name: str) -> bool:
+        return name in self._dirs
+    
+    def has_file(self, name: str) -> bool:
+        return name in self._files
+    
+    def get_filenames(self) -> list[str]:
+        return list(self._files)
+    
+    def get_directorynames(self) -> list[str]:
+        return list(self._dirs)
     
     def get_settings_file(self, name: str) -> SettingsFile:
         if "." in name:
@@ -40,7 +52,10 @@ class SettingsDirectory():
         return self._dirs[name]
     
     def add_settings_file(self, name: str) -> SettingsFile:
-        if not _os.path.exists(self._path):
-            pass
+        if "." in name:
+            return self.get_settings_directory(name[:name.index('.')]).add_settings_directory(name[name.index(".") + 1:])
+        
+        self._files[name] = SettingsFile(self._path + _os.sep + name + ".settings")
+        return self._files[name]
 
 

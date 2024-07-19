@@ -1,0 +1,12 @@
+# Langage : anglais
+
+UI_FIRST_GRAPHIC_HINT_ENTER_NAME    : Please enter your name
+UI_FIRST_GRAPHIC_BUTTON_PLAY        : Play
+
+UI_MAIN_MENU_PLAY_LOCAL             : Play offline
+UI_MAIN_MENU_PLAY_ONLINE            : play online
+
+SETTINGS_TITLE                      : Settings
+SETTINGS_GRAPHICAL                  : Graphical settings
+SETTINGS_LANGUAGE                   : Language
+SETTINGS_LANGUAGE_TITLE             : Language
