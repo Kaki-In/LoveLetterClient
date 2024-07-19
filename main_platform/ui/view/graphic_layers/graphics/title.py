@@ -28,11 +28,11 @@ class GameTitleDisplayedElement(GameDisplayedElement):
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)
         w, h = self._width, self._height
-        x, y = self.x() - w/2, self.y() - h/2
+        x, y = - w/2, - h/2
         
         image_name = "game_title"
         
-        painter.drawImage(_QtCore.QRectF(x, y, self._width, self._height), self._resources.get_images_mapper().get_image_by_name(image_name).get_variant(''))
+        painter.drawImage(_QtCore.QRectF(x, y, self._width, self._height), self._resources.get_images_mapper().get_image_by_name(image_name).get_default())
     
     def get_size(self) -> int:
         return self._height

@@ -51,7 +51,9 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
         pass
     
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
-        pass
+        return
+        painter.setPen(0xFFFFFF)
+        painter.drawRect(self.boundingRect())
         
     def boundingRect(self) -> _QtCore.QRectF:
         x = -self._width / 2

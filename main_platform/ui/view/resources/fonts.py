@@ -1,12 +1,11 @@
 import os as _os
-import io as _io
 from PyQt5 import QtGui as _QtGui
 
 class FontsMapper():
-    def __init__(self):
+    def __init__(self, directory):
         self._fonts: dict[str, str] = {}
         
-        path = _os.path.abspath(_os.path.dirname(__file__)) + _os.path.sep + "fonts"
+        path = directory
         
         for file_name in _os.listdir(path):
             if not (file_name.endswith(".ttf") or file_name.endswith(".woff")):

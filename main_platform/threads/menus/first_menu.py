@@ -2,6 +2,7 @@ from .menu import *
 
 class FirstMenu(Menu):
     def __init__(self):
+        super().__init__()
         self._name: str = ""
     
     def is_valid(self) -> bool:

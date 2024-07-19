@@ -10,12 +10,13 @@ class FirstGraphicLayerController():
         self._layer.get_events()["button_press"].addEventFunction(self.on_button_press)
         self._layer.get_events()["button_release"].addEventFunction(self.on_button_release)
         self._layer.get_events()["text_changed"].addEventFunction(self.on_text_changed)
+        self._layer.get_events()["open_settings_released"].addEventFunction(self.on_open_settings_released)
 
         self._menu = menu
 
         self._events = _events.EventObject(
             "open_menu",
-            "close_menu"
+            "close_menu",
         )
     
     def get_events(self) -> _events.EventObject:
@@ -26,6 +27,9 @@ class FirstGraphicLayerController():
     
     def on_button_release(self) -> None:
         self._events["open_menu"].emit("main")
+    
+    def on_open_settings_released(self, event: _events.Event) -> None:
+        self._events['open_menu'].emit("settings")
     
     def on_text_changed(self, event: _events.Event) -> None:
         value = event.values()[0]

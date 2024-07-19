@@ -7,6 +7,7 @@ class MainGraphicLayerController():
     def __init__(self, graphic_layer: MainMenuGraphicLayer, menu: MainMenu):
 
         self._layer = graphic_layer
+        self._layer.get_events()['back'].addEventFunction(self.on_back_pressed)
 
         self._menu = menu
 
@@ -23,6 +24,9 @@ class MainGraphicLayerController():
     
     def menu(self) -> MainMenu:
         return self._menu
+    
+    def on_back_pressed(self, event: _events.Event):
+        self._events['close_menu'].emit()
     
 
 

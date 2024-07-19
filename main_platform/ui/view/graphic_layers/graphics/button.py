@@ -63,17 +63,17 @@ class ButtonDisplayedElement(GameDisplayedElement):
             return
         
         r = self.boundingRect()
-        w, h = r.width(), r.height()
+        w, h = r.width() - self._size * self._ratio, r.height() - self._size * self._ratio * 4/5
         
         painter.drawImage(r, self._image)
-        
-        font = _QtGui.QFont("Chomsky", int(1000))
+
+        font = _QtGui.QFont("Chomsky", 500)
         fm = _QtGui.QFontMetrics(font)
         
         text_width = fm.width(self._text)
         text_height = fm.height()
         
-        image_format = self._image.width() / self._image.height()
+        image_format = w / h
         text_format = text_width / text_height
 
         if image_format < text_format:
@@ -82,19 +82,21 @@ class ButtonDisplayedElement(GameDisplayedElement):
         else:
             height = h
             width = text_format * height
-        
-        font.setPointSize(int(1000 / text_height * height / 2.5))
+
+        font.setPointSize(int(500 / text_height * height))
         painter.setFont(font)
 
-        width /= 2.5
-        height /= 2.5
+        fm = _QtGui.QFontMetrics(font)
         
+        width = fm.width(self._text)
+        height = fm.height()
+
         if self._enabled:
             painter.setPen(_QtGui.QColor(0xFFFFFFFF))
         else:
             painter.setPen(_QtGui.QColor.fromRgba(0x80FFFFFF))
         
-        painter.drawText(_QtCore.QPoint( int(-int(width)/2), int(int(height)/4)), self._text)
+        painter.drawText(_QtCore.QPoint( int(-width/2), int(height/4)), self._text)
         
     def set_size(self, size: int) -> None:
         self._size = size

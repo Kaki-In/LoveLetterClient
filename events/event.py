@@ -20,6 +20,9 @@ class EventHandler(_QtCore.QObject):
     def addEventFunction(self, func):
         self._signal.connect(func)
     
+    def removeEventFunction(self, func):
+        self._signal.disconnect(func)
+ 
     def emit(self, *values):
         self._signal.emit(Event(*values))
 

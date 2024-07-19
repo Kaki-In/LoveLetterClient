@@ -1,8 +1,11 @@
 from ..threads.menus_thread import *
+from ..threads.menus import *
+
 from ..ui.view.game import *
+
 from .first_controller import *
 from .main_controller import *
-from ..threads.menus import *
+from .settings_controller import *
 
 import events as _events
 
@@ -17,7 +20,7 @@ class MenusController():
         thread.get_events()["menu_close"].addEventFunction(self.close_menu)
 
         self._controllers = []
-        self._layers = []
+        self._layers: list[GraphicLayer] = []
 
     def get_thread(self) -> MenusThread:
         return self._thread
@@ -33,6 +36,9 @@ class MenusController():
 
         elif menu_name == "main":
             menu = MainMenu()
+        
+        elif menu_name == "settings":
+            menu = SettingsMenu()
 
         else:
             raise ValueError("couldn't find any menu named " + repr(menu_name))
@@ -58,14 +64,27 @@ class MenusController():
 
             controller.get_events()["open_menu"].addEventFunction(self.on_open_menu)
             controller.get_events()["close_menu"].addEventFunction(self.on_close_menu)
+        elif type(menu) == SettingsMenu:
+            layer = SettingsLayer(self._display.get_resources())
+            controller = SettingsGraphicLayerController(layer, menu)
+            
+            controller.get_events()["open_menu"].addEventFunction(self.on_open_menu)
+            controller.get_events()["close_menu"].addEventFunction(self.on_close_menu)
         else:
             raise ValueError("Unknown menu " + type(menu).__name__)
         
         self._display.displayLayer(layer)
+
+        for item in layer.get_items():
+            item.start_threads()
+            
         self._layers.append(layer)
         self._controllers.append(controller)
     
     def close_menu(self) -> None:
+        for item in self._layers[-1].get_items():
+            item.stop_threads()
+
         self._layers.pop(-1)
         self._controllers.pop(-1)
 

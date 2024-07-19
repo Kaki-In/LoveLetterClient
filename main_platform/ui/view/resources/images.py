@@ -3,12 +3,12 @@ import os as _os
 from .images_theme import *
 
 class ImagesMapper():
-    def __init__(self):
+    def __init__(self, directory):
         self._themes: dict[str, ImagesTheme] = {}
 
         self._actual_theme = None
         
-        dirname = _os.path.dirname(__file__) + _os.sep + "images" + _os.sep
+        dirname = directory
 
         for entity_name in _os.listdir(dirname):
             if _os.path.isdir(dirname + entity_name):
@@ -28,6 +28,9 @@ class ImagesMapper():
 
     def set_theme_name(self, name: str) -> None:
         self._actual_theme = name
+    
+    def get_theme_names(self) -> list[str]:
+        return list[self._themes]
 
 
 

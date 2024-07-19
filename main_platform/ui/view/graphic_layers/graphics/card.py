@@ -14,7 +14,7 @@ import time as _time
 class CardDisplayedElement(GameDisplayedElement):
     def __init__(self, resources: Resources, character: _love_letter.LoveLetterCharacter, parent = None):
         self._character = character
-        super().__init__(resources, 0, 200, 300, parent)
+        super().__init__(resources, 0, 0, 200, 300, parent)
         
         self._resources.get_fonts_mapper().require_font("Chomsky")
         
@@ -100,7 +100,7 @@ class CardDisplayedElement(GameDisplayedElement):
             image_card = self._resources.get_images_mapper().get_image_by_name("card").get_variant("front")
             image_name = "character_" + character.get_name().lower()
             
-            card_painter.drawImage(_QtCore.QRectF(w * 5/100 - w/2, h * 10/100 - h/2, w * 90/100, h * 85/100), self._resources.get_images_mapper().get_image_by_name(image_name).get_variant('dark'))
+            card_painter.drawImage(_QtCore.QRectF(w * 5/100 - w/2, h * 10/100 - h/2, w * 90/100, h * 85/100), self._resources.get_images_mapper().get_image_by_name(image_name).get_variant('cards'))
             card_painter.drawImage(_QtCore.QRectF(-w/2, -h/2, w, h), image_card)
             
             font = _QtGui.QFont("Chomsky", int(self._width * 10/100))

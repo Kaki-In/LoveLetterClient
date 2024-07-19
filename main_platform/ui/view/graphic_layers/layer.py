@@ -19,6 +19,9 @@ class GraphicLayer():
     def get_resources(self) -> Resources:
         return self._resources
     
+    def background_variant(self) -> str:
+        return ""
+    
     def get_items(self) -> list[ GameDisplayedElement ]:
         return []
     

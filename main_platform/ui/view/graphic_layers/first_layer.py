@@ -3,6 +3,7 @@ from .layer import *
 from .graphics.text_input import *
 from .graphics.button import *
 from .graphics.title import *
+from .graphics.icon_button import *
 
 from .controllers.graphical_text_input import *
 from .controllers.graphical_button import *
@@ -30,10 +31,16 @@ class FirstGraphicLayer(GraphicLayer):
         
         self._game_title = GameTitleDisplayedElement(resources)
 
+        self._settings_button = IconButtonDisplayedElement(resources, "settings")
+        self._settings_button.get_events()['mouse_release'].addEventFunction(self.on_settings_button_release)
+
+        self._settings_button_controller = GraphicalButtonController(self._settings_button)
+
         self._events.create_events(
             "button_press",
             "button_release",
-            "text_changed"
+            "text_changed",
+            "open_settings_released"
         )
     
     def on_button_press(self, event: _events.Event) -> None:
@@ -41,6 +48,9 @@ class FirstGraphicLayer(GraphicLayer):
     
     def on_button_release(self, event: _events.Event) -> None:
         self._events["button_release"].emit()
+    
+    def on_settings_button_release(self, event: _events.Event) -> None:
+        self._events['open_settings_released'].emit()
     
     def on_text_changed(self, text: _events.Event) -> None:
         text = text.values()[0]
@@ -57,17 +67,20 @@ class FirstGraphicLayer(GraphicLayer):
     
     def set_rect(self, x: int, y: int, w: int, h: int) -> None:
         
-        self._text_input.go_to_size( h/12 )
+        self._text_input.set_size( h/12 )
         self._text_input.set_position(x + w/2, y + 7 * h / 12)
         
-        self._button.go_to_size( h/10 )
+        self._button.set_size( h/10 )
         self._button.set_position(x + w/2, y + 5 * h/6)
         
-        self._game_title.go_to_size( h/4 )
-        self._game_title.set_position(x + w/2, y + 9*h/24)
+        self._game_title.set_size( h/4 )
+        self._game_title.set_position(x + w/2, y + h/5)
+
+        self._settings_button.set_position(x + w - 20 - w/100, y + 20 + w/100)
+        self._settings_button.set_size(w/50)
     
     def get_items(self) -> list[ GameDisplayedElement ]:
-        return [self._text_input, self._button, self._game_title]
+        return [self._text_input, self._button, self._game_title, self._settings_button]
     
 
 

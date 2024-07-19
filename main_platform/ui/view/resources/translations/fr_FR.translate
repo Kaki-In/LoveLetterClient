@@ -6,3 +6,6 @@ UI_FIRST_GRAPHIC_BUTTON_PLAY        : Jouer
 UI_MAIN_MENU_PLAY_LOCAL             : Jouer en local
 UI_MAIN_MENU_PLAY_ONLINE            : Jouer en ligne
 
+SETTINGS_TITLE                      : Paramètres
+SETTINGS_GRAPHICAL                  : Options graphiques
+SETTINGS_LANGUAGE                   : Language
