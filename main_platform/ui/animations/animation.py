@@ -55,6 +55,7 @@ class Animation(_QtCore.QObject):
             
             self._runs = True
             value = self._values.pop(0)
+            self.signal_frame.emit(value[0])
             
             t = _time.monotonic()
             

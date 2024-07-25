@@ -2,10 +2,12 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
+
 from .element import *
 
 class LabelDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources: Resources, text: str, size: int, parent = None):
+    def __init__(self, resources: _resources.Resources, text: str, size: int, parent = None):
         super().__init__(resources, 0, 0, 50, 50, parent)
 
         self._text = text

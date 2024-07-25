@@ -8,10 +8,11 @@ from .controllers.graphical_deck import *
 
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
 import love_letter as _love_letter
 
 class RoundGraphicLayer(GraphicLayer):
-    def __init__(self, resources: Resources, players: list[_love_letter.LoveLetterPlayer], active_player: int, deck: _love_letter.LoveLetterDeck):
+    def __init__(self, resources: _resources.Resources, players: list[_love_letter.LoveLetterPlayer], active_player: int, deck: _love_letter.LoveLetterDeck):
         super().__init__(resources)
         
         self._players: list[PlayerDisplayedElement] = []

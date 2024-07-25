@@ -31,6 +31,8 @@ class MenusController():
         self._display.get_resources().get_images_mapper().set_theme_name(settings.get_graphical_settings().get_theme_name())
         self._display.get_resources().get_translator().set_actual_language(settings.get_language_settings().get_language_id())
 
+        self._display.set_full_screen_mode(settings.get_graphical_settings().get_fullscreen_mode())
+
     def get_thread(self) -> MenusThread:
         return self._thread
     

@@ -5,6 +5,8 @@ from PyQt5 import QtCore as _QtCore
 from .element import *
 from ....animations import *
 
+import resources as _resources
+
 import love_letter as _love_letter
 import typing as _T
 import math as _math
@@ -12,7 +14,7 @@ import traceback as _traceback
 import time as _time
 
 class CardDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources: Resources, character: _love_letter.LoveLetterCharacter, parent = None):
+    def __init__(self, resources: _resources.Resources, character: _love_letter.LoveLetterCharacter, parent = None):
         self._character = character
         super().__init__(resources, 0, 0, 200, 300, parent)
         

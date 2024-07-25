@@ -5,6 +5,8 @@ from PyQt5 import QtCore as _QtCore
 from .element import *
 from .card import *
 
+import resources as _resources
+
 from ....animations import *
 
 import love_letter as _love_letter
@@ -12,7 +14,7 @@ import typing as _T
 import math as _math
 
 class DeckDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources: Resources, count: int, last_card: _T.Optional[_love_letter.LoveLetterCard], parent = None):
+    def __init__(self, resources: _resources.Resources, count: int, last_card: _T.Optional[_love_letter.LoveLetterCard], parent = None):
         super().__init__(resources, 0, 0, 450, 300, parent)
         
         self._last_card = last_card

@@ -1,4 +1,5 @@
 import settings as _settings
+import os as _os
 
 class LanguageSettings():
     def __init__(self, configuration: _settings.SettingsObject):

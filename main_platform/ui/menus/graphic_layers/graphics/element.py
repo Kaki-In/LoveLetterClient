@@ -2,14 +2,14 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
-from ....resources import *
+import resources as _resources
 
 import typing as _T
 import events as _events
 
 class GameDisplayedElement(_QtWidgets.QGraphicsObject):
     
-    def __init__(self, resources: Resources, x: int, y: int, width: int, height: int, parent = None):
+    def __init__(self, resources: _resources.Resources, x: int, y: int, width: int, height: int, parent = None):
         super().__init__(parent)
         
         self._width: int = width
@@ -38,10 +38,10 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
     def get_events(self) -> _events.EventObject:
         return self._events
         
-    def get_resources(self) -> Resources:
+    def get_resources(self) -> _resources.Resources:
         return self._resources
     
-    def set_resources(self, resources: Resources) -> None:
+    def set_resources(self, resources: _resources.Resources) -> None:
         self._resources = resources
     
     def start_threads(self) -> None:
@@ -64,6 +64,10 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
     def hoverEnterEvent(self, event) -> None:
         super().hoverEnterEvent(event)
         self._events["hover_enter"].emit(event)
+    
+    def hoverMoveEvent(self, event) -> None:
+        super().hoverMoveEvent(event)
+        self._events["hover_move"].emit(event)
     
     def hoverLeaveEvent(self, event) -> None:
         self._events["hover_leave"].emit(event)
@@ -98,6 +102,7 @@ class GameDisplayedElement(_QtWidgets.QGraphicsObject):
         item.setPixmap(_QtGui.QPixmap.fromImage(src))
         item.setGraphicsEffect(effect)
         scene.addItem(item)
+
         res = _QtGui.QImage(src.size() + _QtCore.QSize(extent*2, extent*2), _QtGui.QImage.Format.Format_ARGB32)
         res.fill(_QtCore.Qt.GlobalColor.transparent)
         ptr = _QtGui.QPainter(res)

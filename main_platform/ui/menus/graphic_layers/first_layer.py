@@ -8,20 +8,21 @@ from .graphics.icon_button import *
 from .controllers.graphical_text_input import *
 from .controllers.graphical_button import *
 
+import resources as _resources
 import events as _events
 
 class FirstGraphicLayer(GraphicLayer):
-    def __init__(self, resources):
+    def __init__(self, resources: _resources.Resources):
         super().__init__(resources)
         
         self._text_input = TextInputDisplayedElement(resources, "")
-        self._text_input.set_text_hint(resources.get_translator().translate("UI_FIRST_GRAPHIC_HINT_ENTER_NAME"))
+        self._text_input.set_text_hint("UI_FIRST_GRAPHIC_HINT_ENTER_NAME")
         self._text_input.set_size(0)
         self._text_input.get_events()["text_changed"].addEventFunction(self.on_text_changed)
         
         self._text_controller = GraphicalTextInputController(self._text_input)
         
-        self._button = ButtonDisplayedElement(resources, resources.get_translator().translate("UI_FIRST_GRAPHIC_BUTTON_PLAY"))
+        self._button = ButtonDisplayedElement(resources, "UI_FIRST_GRAPHIC_BUTTON_PLAY")
         self._button.get_events()["mouse_press"].addEventFunction(self.on_button_press)
         self._button.get_events()["mouse_release"].addEventFunction(self.on_button_release)
         self._button.set_size(0)
@@ -83,8 +84,8 @@ class FirstGraphicLayer(GraphicLayer):
         self._game_title.set_size( h/4 )
         self._game_title.set_position(x + w/2, y + h/5)
 
-        self._settings_button.set_position(x + w - 20 - w/100, y + 20 + w/100)
-        self._settings_button.set_size(w/50)
+        self._settings_button.set_position(x + w - 20 - 25, y + 20 + 25)
+        self._settings_button.set_size(50)
     
     def get_items(self) -> list[ GameDisplayedElement ]:
         return [self._text_input, self._button, self._game_title, self._settings_button]

@@ -8,21 +8,22 @@ from .graphics.icon_button import *
 from .controllers.graphical_text_input import *
 from .controllers.graphical_button import *
 
+import resources as _resources
 import events as _events
 
 class MainMenuGraphicLayer(GraphicLayer):
-    def __init__(self, resources):
+    def __init__(self, resources: _resources.Resources):
         super().__init__(resources)
 
         self._game_title = GameTitleDisplayedElement(resources)
 
-        self._play_local = ButtonDisplayedElement(resources, resources.get_translator().translate("UI_MAIN_MENU_PLAY_LOCAL"))
+        self._play_local = ButtonDisplayedElement(resources, "UI_MAIN_MENU_PLAY_LOCAL")
         self._play_local_controller = GraphicalButtonController(self._play_local)
 
         self._play_local.get_events()["mouse_press"].addEventFunction(self.on_local_press)
         self._play_local.get_events()["mouse_release"].addEventFunction(self.on_local_release)
 
-        self._play_online = ButtonDisplayedElement(resources, resources.get_translator().translate("UI_MAIN_MENU_PLAY_ONLINE"))
+        self._play_online = ButtonDisplayedElement(resources, "UI_MAIN_MENU_PLAY_ONLINE")
         self._play_online_controller = GraphicalButtonController(self._play_online)
 
         self._play_online.get_events()["mouse_press"].addEventFunction(self.on_online_press)
@@ -67,8 +68,8 @@ class MainMenuGraphicLayer(GraphicLayer):
         self._play_online.set_size(h/10)
         self._play_online.set_position(x + w * 2/3, y + h * 2/3)
     
-        self._back_button.set_position(x + 20 + w/100, y + 20 + w/100)
-        self._back_button.set_size(w/50)
+        self._back_button.set_position(x + 20 + 25, y + 20 + 25)
+        self._back_button.set_size(50)
 
     def get_items(self) -> list[ GameDisplayedElement ]:
         return [self._game_title, self._play_online, self._play_local, self._back_button]

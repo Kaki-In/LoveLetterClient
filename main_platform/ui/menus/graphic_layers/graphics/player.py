@@ -5,6 +5,8 @@ from PyQt5 import QtCore as _QtCore
 from .element import *
 from .card import *
 
+import resources as _resources
+
 from ....animations import *
 
 import love_letter as _love_letter
@@ -12,7 +14,7 @@ import typing as _T
 import math as _math
 
 class PlayerDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources, first_card: _love_letter.LoveLetterCard, second_card: _love_letter.LoveLetterCard, name: str, discard: list[_love_letter.LoveLetterCard] = [], parent = None):
+    def __init__(self, resources: _resources.Resources, first_card: _love_letter.LoveLetterCard, second_card: _love_letter.LoveLetterCard, name: str, discard: list[_love_letter.LoveLetterCard] = [], parent = None):
         super().__init__(resources, 0, 0, 300, 300, parent)
         
         self._first_card = first_card

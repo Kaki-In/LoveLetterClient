@@ -2,11 +2,13 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
+
 from .element import *
 from ....animations import *
 
 class MainDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources, parent=None):
+    def __init__(self, resources: _resources.Resources, parent=None):
         super().__init__(resources, 0, 0, 0, 0)
         
         self._size = 300
@@ -16,8 +18,10 @@ class MainDisplayedElement(GameDisplayedElement):
         
         self._variant = ""
         self._last_variant = ""
+        self._next_variant = ""
 
         self._animation_variant = ExponentialAnimation()
+        self._animation_variant.set_one_by_one(True)
         self._animation_variant.signal_frame.connect(self.on_signal_frame)
 
         self._animation_state = 0
@@ -29,10 +33,7 @@ class MainDisplayedElement(GameDisplayedElement):
         self._animation_variant.stop()
     
     def set_variant(self, name: str, time: float = 1.) -> None:
-        self._last_variant = self._variant
-        self._variant = name
-
-        self._animation_state = 0
+        self._next_variant = name
         self._animation_variant.start_transition(0, 1, time)
     
     def get_variant(self) -> str:
@@ -91,5 +92,11 @@ class MainDisplayedElement(GameDisplayedElement):
     
     def on_signal_frame(self, value: float) -> None:
         self._animation_state = value
+        
+        if value == 0:
+            self._last_variant = self._variant
+            self._variant = self._next_variant
+            self._next_variant = ""
+        
         self.update()
 

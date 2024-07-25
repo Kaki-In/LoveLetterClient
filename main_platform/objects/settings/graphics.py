@@ -12,3 +12,9 @@ class GraphicalSettings():
     
     def set_theme_name(self, name: str) -> None:
         self._configuration['theme'] = name
+    
+    def get_fullscreen_mode(self) -> bool:
+        return self._configuration['fullscreen']
+    
+    def set_fullscreen_mode(self, enabled: bool) -> None:
+        self._configuration['fullscreen'] = enabled

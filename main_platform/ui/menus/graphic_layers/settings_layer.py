@@ -4,10 +4,11 @@ from .graphics.icon_button import *
 from .graphics.label import *
 from .controllers.graphical_button import *
 
+import resources as _resources
 import events as _events
 
 class SettingsLayer(GraphicLayer):
-    def __init__(self, resources: Resources):
+    def __init__(self, resources: _resources.Resources):
         super().__init__(resources)
 
         self._settings_label = LabelDisplayedElement(resources, "SETTINGS_TITLE", 100)
@@ -49,8 +50,8 @@ class SettingsLayer(GraphicLayer):
         return "settings"
     
     def set_rect(self, x: int, y: int, w: int, h: int) -> None:
-        self._back_button.set_position(x + 20 + w/100, y + 20 + w/100)
-        self._back_button.set_size( w/50 )
+        self._back_button.set_position(x + 20 + 25, y + 20 + 25)
+        self._back_button.set_size( 50 )
 
         self._settings_label.set_position(x + w/2, y + h/7)
         self._settings_label.set_size( w/14 )

@@ -2,12 +2,14 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
+
 from .element import *
 
 from ....animations.exponential_animation import *
 
 class TextInputDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources: Resources, text: str, parent = None):
+    def __init__(self, resources: _resources.Resources, text: str, parent = None):
         super().__init__(resources, 0, 0, 250, 50, parent)
         
         self._resources.get_fonts_mapper().require_font("Chomsky")
@@ -122,7 +124,7 @@ class TextInputDisplayedElement(GameDisplayedElement):
         
         font = _QtGui.QFont("Chomsky", int(self._height / 3))
         fm = _QtGui.QFontMetrics(font)
-        text_width = fm.width(self._text or self._text_hint)
+        text_width = fm.width(self._text or self._resources.get_translator().translate(self._text_hint))
         text_height = fm.height()
         
         button_width = w - h*4/10
@@ -157,7 +159,7 @@ class TextInputDisplayedElement(GameDisplayedElement):
             text_painter.setPen(_QtGui.QColor(0xFFFFFFFF))
         else:
             text_painter.setPen(_QtGui.QColor.fromRgba(0x80FFFFFF))
-        text_painter.drawStaticText(_QtCore.QPoint(int(self._text_position), 0), _QtGui.QStaticText(self._text or self._text_hint))
+        text_painter.drawStaticText(_QtCore.QPoint(int(self._text_position), 0), _QtGui.QStaticText(self._text or self._resources.get_translator().translate(self._text_hint)))
         
         if self.hasFocus() and self._blink_state:
             text_painter.drawLine(int(cursor_position), 0, int(cursor_position), text_height)

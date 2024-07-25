@@ -11,6 +11,22 @@ class LanguageSettingsGraphicLayerController(LayerController):
         super().__init__(graphic_layer, menu, settings)
 
         self.add_layer_event('back', self.on_back_pressed)
+        self.add_layer_event('language_change', self.on_language_requested)
+
+        translator = graphic_layer.get_resources().get_translator()
+
+        menu.clear_languages()
+        for language_id in translator.get_languages():
+            language = translator.get_language(language_id)
+            menu.add_language(language_id, language)
+        
+        graphic_layer.set_languages_list([language[1].get_name() for language in menu.get_languages()])
+
+        language_id = translator.get_actual_language()
+        languages = [tup[0] for tup in menu.get_languages()]
+
+        menu.set_language(languages.index(language_id))
+        graphic_layer.set_position(languages.index(language_id))
 
     def get_layer(self) -> LanguageSettingsLayer:
         return super().get_layer()
@@ -30,3 +46,14 @@ class LanguageSettingsGraphicLayerController(LayerController):
     
     def on_language_settings_pressed(self, event: _events.Event) -> None:
         self.open_menu('settings.language')
+    
+    def on_language_requested(self, event: _events.Event) -> None:
+        item = event.values()[0]
+        language = self.get_menu().get_languages()[item]
+
+        self.get_menu().set_language(language)
+
+        self.get_settings().get_language_settings().set_language_id(language[0])
+        self.get_layer().get_resources().get_translator().set_actual_language(language[0])
+
+        self.on_back_pressed(event)

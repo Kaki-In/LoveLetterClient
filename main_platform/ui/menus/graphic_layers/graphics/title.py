@@ -2,12 +2,14 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
+
 from .element import *
 
 from ....animations.exponential_animation import *
 
 class GameTitleDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources, parent = None):
+    def __init__(self, resources: _resources.Resources, parent = None):
         super().__init__(resources, 0, 0, 50, 50, parent)
         
         self._size_animation = ExponentialAnimation()

@@ -2,11 +2,13 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
+
 from .element import *
 from ....animations import *
 
 class IconButtonDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources: Resources, icon_name: str, parent = None):
+    def __init__(self, resources: _resources.Resources, icon_name: str, parent = None):
         self._icon = icon_name
         self._ratio = 1
         super().__init__(resources, 0, 0, 20, 20, parent)

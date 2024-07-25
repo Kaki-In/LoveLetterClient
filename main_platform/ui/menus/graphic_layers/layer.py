@@ -1,9 +1,10 @@
 from .graphics import *
 
+import resources as _resources
 import events as _events
 
 class GraphicLayer():
-    def __init__(self, resources: Resources):
+    def __init__(self, resources: _resources.Resources):
         super().__init__()
         
         self._resources = resources
@@ -13,10 +14,10 @@ class GraphicLayer():
     def get_events(self) -> _events.EventObject:
         return self._events
         
-    def set_resources(self, resources: Resources) -> None:
+    def set_resources(self, resources: _resources.Resources) -> None:
         self._resources = resources
     
-    def get_resources(self) -> Resources:
+    def get_resources(self) -> _resources.Resources:
         return self._resources
     
     def background_variant(self) -> str:

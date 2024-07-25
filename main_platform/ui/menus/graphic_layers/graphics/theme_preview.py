@@ -2,11 +2,13 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
+
 from .element import *
 from ....animations import *
 
 class ThemePreviewDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources: Resources, theme_name: str, parent = None):
+    def __init__(self, resources: _resources.Resources, theme_name: str, parent = None):
         self._theme_name = theme_name
         super().__init__(resources, 0, 0, 20, 20, parent)
 

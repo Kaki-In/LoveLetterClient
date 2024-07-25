@@ -2,12 +2,14 @@ from PyQt5 import QtWidgets as _QtWidgets
 from PyQt5 import QtGui as _QtGui
 from PyQt5 import QtCore as _QtCore
 
+import resources as _resources
+
 from .element import *
 
 from ....animations import *
 
 class ButtonDisplayedElement(GameDisplayedElement):
-    def __init__(self, resources: Resources, text: str, parent = None):
+    def __init__(self, resources: _resources.Resources, text: str, parent = None):
         super().__init__(resources, 0, 0, 50, 50, parent)
         
         self._resources.get_fonts_mapper().require_font("Chomsky")
@@ -57,6 +59,8 @@ class ButtonDisplayedElement(GameDisplayedElement):
             event.ignore()
     
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
+        text = self._resources.get_translator().translate(self._text)
+
         super().paint(painter, options, widget)
 
         if self._size < 3 / self._ratio:
@@ -70,7 +74,7 @@ class ButtonDisplayedElement(GameDisplayedElement):
         font = _QtGui.QFont("Chomsky", 500)
         fm = _QtGui.QFontMetrics(font)
         
-        text_width = fm.width(self._text)
+        text_width = fm.width(text)
         text_height = fm.height()
         
         image_format = w / h
@@ -88,7 +92,7 @@ class ButtonDisplayedElement(GameDisplayedElement):
 
         fm = _QtGui.QFontMetrics(font)
         
-        width = fm.width(self._text)
+        width = fm.width(text)
         height = fm.height()
 
         if self._enabled:
@@ -96,7 +100,7 @@ class ButtonDisplayedElement(GameDisplayedElement):
         else:
             painter.setPen(_QtGui.QColor.fromRgba(0x80FFFFFF))
         
-        painter.drawText(_QtCore.QPoint( int(-width/2), int(height/4)), self._text)
+        painter.drawText(_QtCore.QPoint( int(-width/2), int(height/4)), text)
         
     def set_size(self, size: int) -> None:
         self._size = size

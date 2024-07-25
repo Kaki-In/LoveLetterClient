@@ -8,7 +8,7 @@ from .user import *
 class MainSettings():
     def __init__(self):
         home_path = _os.environ["HOME"]
-        self._directory = _settings.SettingsDirectory(home_path + _os.sep + ".love_letter")
+        self._directory = _settings.SettingsDirectory(home_path + _os.sep + ".love_letter" + _os.sep + "settings")
 
         if not self._directory.has_file("language"):
             self._directory.add_settings_file("language")

@@ -11,4 +11,4 @@ class UserSettings():
         return self._configuration['name']
     
     def set_name(self, value: str) -> None:
-        self._configuration['name'] = value
+        self._configuration['name'] = value 
