@@ -1,9 +1,6 @@
 from ....animations.linear_animation import *
 from ..graphics.button import *
 
-import love_letter as _love_letter
-import random as _random
-
 class GraphicalButtonController():
     def __init__(self, button: ButtonDisplayedElement):
         self._element: ButtonDisplayedElement = button

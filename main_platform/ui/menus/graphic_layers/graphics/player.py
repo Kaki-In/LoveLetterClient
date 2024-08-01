@@ -103,13 +103,12 @@ class PlayerDisplayedElement(GameDisplayedElement):
     
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)
-        image = self._resources.get_images_mapper().get_image_by_name("player")
+        image = self._resources.get_themes_mapper().get_image_by_name("player").get_default()
         
         w, h = self._width, self._height
         x, y = -w/2, -h/2
         
-        variant = "dark" if self._dark_mode else "light"
-        painter.drawImage(_QtCore.QRectF(x, y, w, h), image.get_variant(variant))
+        painter.drawImage(_QtCore.QRectF(x, y, w, h), image)
         
         if self._first_card:
             self.paintChild(self._first_card_element, painter, options, widget)
@@ -124,15 +123,12 @@ class PlayerDisplayedElement(GameDisplayedElement):
         
         font.setPointSize(int(self._width * 10/100))
         painter.setFont(font)
-        
-        if self._dark_mode:
-            painter.setPen(_QtGui.QColor( 0xFFFFFFFF ))
-        else:
-            painter.setPen(_QtGui.QColor( 0xFF000000 ))
+
+        painter.setPen(_QtGui.QColor(0))
         
         painter.drawText(_QtCore.QPoint(int(x + w/2 - text_width/2), int(y + h/5 - text_height/2)), self._name)
         
-        heart_image = self._resources.get_images_mapper().get_image_by_name("heart")
+        heart_image = self._resources.get_themes_mapper().get_image_by_name("heart")
         
         for n in range(1, self._max_rounds + 1):
             if n <= self._won_rounds:
@@ -145,7 +141,7 @@ class PlayerDisplayedElement(GameDisplayedElement):
         
         for position, card in enumerate(self._discard):
             character = card.get_character().get_name().lower()
-            image = self._resources.get_images_mapper().get_image_by_name("character_" + character)
+            image = self._resources.get_themes_mapper().get_image_by_name("character_" + character)
             display_image = image.get_variant("token")
             
             x_pos = x + w/20 + position * w/8

@@ -45,8 +45,8 @@ class MainDisplayedElement(GameDisplayedElement):
         cx = self._width/2
         cy = self._height/2
 
-        last_background = self._resources.get_images_mapper().get_image_by_name("background").get_variant(self._last_variant)
-        background = self._resources.get_images_mapper().get_image_by_name("background").get_variant(self._variant)
+        last_background = self._resources.get_themes_mapper().get_image_by_name("background").get_variant(self._last_variant)
+        background = self._resources.get_themes_mapper().get_image_by_name("background").get_variant(self._variant)
 
         if self._animation_state != 1:
             effect = _QtWidgets.QGraphicsOpacityEffect()

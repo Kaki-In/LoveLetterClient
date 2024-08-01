@@ -46,11 +46,13 @@ class ListDisplayedElement(GameDisplayedElement):
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)
 
+        palette = self._resources.get_themes_mapper().get_palette().get_sub_palette('graphics').get_palette('list')
+
         br = self.boundingRect()
         width, height = br.width(), br.height()
 
-        painter.setBrush(_QtGui.QColor(0,0,0,127))
-        painter.setPen(_QtGui.QColor(0,0,0,0))
+        painter.setBrush(palette.get_color('background'))
+        painter.setPen(palette.get_color('border'))
         painter.drawRoundedRect(br, 10, 10)
 
         padding = width/30
@@ -62,7 +64,7 @@ class ListDisplayedElement(GameDisplayedElement):
 
         if width - 2*padding > 0 and height - 2*padding > 0:
             elements_pixmap = _QtGui.QPixmap(int(width - 2*padding), int(height - 2*padding))
-            elements_pixmap.fill(_QtGui.QColor(0,0,0,0))
+            elements_pixmap.fill(_QtGui.QColor.fromRgba(0))
             pixmap_painter = _QtGui.QPainter(elements_pixmap)
 
             font = _QtGui.QFont("Chomsky", int(self._size * 3/5))
@@ -76,25 +78,24 @@ class ListDisplayedElement(GameDisplayedElement):
                     continue
 
                 if y_index:
-                    pixmap_painter.setPen(_QtGui.QColor(0xFFFFFF))
+                    pixmap_painter.setPen(palette.get_color('line'))
                     pixmap_painter.drawLine(0, int(y_index * self._size - self._scroll_y_position), int(width - padding*2), int(y_index * self._size - self._scroll_y_position))
                 
                 if y_index == self._selected_element:
-                    background = _QtGui.QColor(0)
+                    background = palette.get_color('selected')
                 elif y_index == self._hovered_element:
-                    background = _QtGui.QColor(0, 0, 0, 127)
+                    background = palette.get_color('hovered')
                 else:
-                    background = _QtGui.QColor(0,0,0,0)
+                    background = palette.get_color('default')
 
-                pixmap_painter.setPen(_QtGui.QColor(0,0,0,0))
+                pixmap_painter.setPen(_QtGui.QColor.fromRgba(0))
                 pixmap_painter.setBrush(background)
                 pixmap_painter.drawRect(_QtCore.QRectF(0, y_index * self._size - self._scroll_y_position+ 1, width - 2*padding, self._size - 1))
 
                 text_width = _QtGui.QFontMetrics(font).width(element)
 
-                pixmap_painter.setPen(_QtGui.QColor(0xFFFFFF))
-                pixmap_painter.setBrush(_QtGui.QColor(0xFFFFFF))
-                pixmap_painter.drawStaticText(int((width - text_width)/2 - padding), int((y_index)*self._size - self._scroll_y_position), _QtGui.QStaticText(element))
+                pixmap_painter.setPen(palette.get_color('element_text'))
+                pixmap_painter.drawStaticText(int((width - text_width)/2 - padding), int((y_index + 1/5)*self._size - self._scroll_y_position), _QtGui.QStaticText(element))
 
             pixmap_painter.end()
 

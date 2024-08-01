@@ -2,7 +2,7 @@ from .layer import *
 
 from .graphics.icon_button import *
 from .graphics.label import *
-from .graphics.list import *
+from .graphics.dlist import *
 
 from .controllers.graphical_button import *
 from .controllers.graphical_list import *
@@ -57,7 +57,7 @@ class LanguageSettingsLayer(GraphicLayer):
         self._settings_label.set_position(x + w/2, y + h/7)
         self._settings_label.set_size( w/14 )
 
-        self._list.set_font_size(w/20)
+        self._list.set_font_size( w/50 )
         self._list.set_position(x + w/2, y + h * 5/8)
         self._list.set_width(w * 9/20)
         self._list.set_height(h /2)

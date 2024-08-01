@@ -34,7 +34,7 @@ class GameTitleDisplayedElement(GameDisplayedElement):
         
         image_name = "game_title"
         
-        painter.drawImage(_QtCore.QRectF(x, y, self._width, self._height), self._resources.get_images_mapper().get_image_by_name(image_name).get_default())
+        painter.drawImage(_QtCore.QRectF(x, y, self._width, self._height), self._resources.get_themes_mapper().get_image_by_name(image_name).get_default())
     
     def get_size(self) -> int:
         return self._height

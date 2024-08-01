@@ -105,12 +105,12 @@ class DeckDisplayedElement(GameDisplayedElement):
     
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)
-        image = self._resources.get_images_mapper().get_image_by_name("deck")
+        image = self._resources.get_themes_mapper().get_image_by_name("deck").get_default()
         
         x, y = -self._width / 2, -self._height / 2
         w, h = self._width, self._height
         
-        painter.drawImage(_QtCore.QRectF(x, y, w, h), image.get_variant(""))
+        painter.drawImage(_QtCore.QRectF(x, y, w, h), image)
         
         if self._count and not (self._animation_above_deck and self._animation_card.get_position_animations()[0].isRunning()):
             self._no_card.set_position(x + h * 1/3, y + h / 2)

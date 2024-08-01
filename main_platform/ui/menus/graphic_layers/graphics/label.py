@@ -17,18 +17,20 @@ class LabelDisplayedElement(GameDisplayedElement):
         
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)
+        
+        palette = self._resources.get_themes_mapper().get_palette().get_sub_palette('graphics').get_palette('label')
 
         br = self.boundingRect()
         width, height = br.width(), br.height()
 
         gradient = _QtGui.QLinearGradient(_QtCore.QPoint(int(-width/2), 0), _QtCore.QPoint(int(width/2), 0))
-        gradient.setColorAt(0, _QtGui.QColor(0, 0, 0, 0))
-        gradient.setColorAt(0.25, _QtGui.QColor(0, 0, 0))
-        gradient.setColorAt(0.75, _QtGui.QColor(0, 0, 0))
-        gradient.setColorAt(1, _QtGui.QColor(0, 0, 0, 0))
+        gradient.setColorAt(0, _QtGui.QColor.fromRgba(0))
+        gradient.setColorAt(0.25, palette.get_color('background'))
+        gradient.setColorAt(0.75, palette.get_color('background'))
+        gradient.setColorAt(1, _QtGui.QColor.fromRgba(0))
 
         painter.setBrush(gradient)
-        painter.setPen(_QtGui.QColor(0,0,0,0))
+        painter.setPen(_QtGui.QColor.fromRgba(0))
         painter.drawRect(int(-width/2), int(-height/2), int(width), int(height))
 
         font = painter.font()
@@ -36,7 +38,7 @@ class LabelDisplayedElement(GameDisplayedElement):
         font.setFamily('Chomsky')
         painter.setFont(font)
 
-        painter.setPen(_QtGui.QColor(0xFFFFFF))
+        painter.setPen(palette.get_color('text'))
 
         painter.drawStaticText(int(-width/4), int(-height/4), _QtGui.QStaticText(self._resources.get_translator().translate(self._text)))
     

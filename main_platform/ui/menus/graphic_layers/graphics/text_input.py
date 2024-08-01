@@ -107,6 +107,8 @@ class TextInputDisplayedElement(GameDisplayedElement):
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)
         
+        palette = self._resources.get_themes_mapper().get_palette().get_sub_palette('graphics').get_palette('text_input')
+
         if self._height < 3:
             return
         
@@ -114,13 +116,13 @@ class TextInputDisplayedElement(GameDisplayedElement):
         w, h = r.width(), r.height()
         x, y = r.x() + w/2, r.y() + h/2
         
-        painter.setBrush(_QtGui.QColor(0x3E070C))
+        painter.setBrush(palette.get_color('border'))
         painter.setPen(_QtGui.QColor.fromRgba(0))
-        painter.drawRect(self.boundingRect())
+        painter.drawRoundedRect(self.boundingRect(), 10, 10)
         
-        painter.setBrush(_QtGui.QColor(0x7D0F19))
+        painter.setBrush(palette.get_color("background"))
         painter.setPen(_QtGui.QColor.fromRgba(0))
-        painter.drawRect(_QtCore.QRect(int(r.x() + h/10), int(r.y() + h/10), int(w - h * 2/10), int(h * 8/10)))
+        painter.drawRoundedRect(_QtCore.QRect(int(r.x() + h/10), int(r.y() + h/10), int(w - h * 2/10), int(h * 8/10)), 4, 4)
         
         font = _QtGui.QFont("Chomsky", int(self._height / 3))
         fm = _QtGui.QFontMetrics(font)
@@ -155,10 +157,13 @@ class TextInputDisplayedElement(GameDisplayedElement):
         
         cursor_position = (self._text_position + cursor_x) if self._text or not self._centered else (button_width / 2)
         
-        if self._text:
-            text_painter.setPen(_QtGui.QColor(0xFFFFFFFF))
-        else:
-            text_painter.setPen(_QtGui.QColor.fromRgba(0x80FFFFFF))
+        color = _QtGui.QColor(palette.get_color('text'))
+
+        if not self._text:
+            color.setAlpha(128)
+
+        text_painter.setPen(color)
+
         text_painter.drawStaticText(_QtCore.QPoint(int(self._text_position), 0), _QtGui.QStaticText(self._text or self._resources.get_translator().translate(self._text_hint)))
         
         if self.hasFocus() and self._blink_state:
@@ -169,9 +174,9 @@ class TextInputDisplayedElement(GameDisplayedElement):
         painter.drawImage(_QtCore.QPoint(int(x - w/2 + h*2/10), int(y - text_height/2)), text_image.toImage())
         
         if self.hasFocus():
-            painter.setPen(_QtGui.QColor(0xFFFFFFFF))
+            painter.setPen(palette.get_color('outline'))
             painter.setBrush(_QtGui.QColor.fromRgba(0))
-            painter.drawRect(self.boundingRect())
+            painter.drawRoundedRect(self.boundingRect(), 10, 10)
         
     def set_height(self, size: int) -> None:
         self._height = size

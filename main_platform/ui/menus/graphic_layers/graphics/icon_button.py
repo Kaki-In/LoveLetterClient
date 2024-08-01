@@ -19,8 +19,6 @@ class IconButtonDisplayedElement(GameDisplayedElement):
 
         self._title = ""
         resources.get_fonts_mapper().require_font("Chomsky")
-        
-        self._image = resources.get_images_mapper().get_image_by_name(icon_name).get_variant("icon")
     
     def set_title(self, title: str) -> None:
         self._title = title
@@ -37,15 +35,19 @@ class IconButtonDisplayedElement(GameDisplayedElement):
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)
 
+        image = self._resources.get_themes_mapper().get_image_by_name(self._icon).get_variant("icon")
+
+        palette = self._resources.get_themes_mapper().get_palette().get_sub_palette('graphics').get_palette('icon_button')
+
         r = self.boundingRect()
         x, y = r.x(), r.y()
         w, h = r.width(), r.height()
 
-        painter.setBrush(_QtGui.QColor(0, 0, 0, 127))
-        painter.setPen(_QtGui.QColor(0, 0, 0, 0))
+        painter.setBrush(palette.get_color('background'))
+        painter.setPen(_QtGui.QColor.fromRgba(0))
         painter.drawRoundedRect(self.boundingRect(), self._height/4, self._height/4)
 
-        painter.drawImage(_QtCore.QRectF(-h/4, -h/4, w-h/2,h-h/2), self._image)
+        painter.drawImage(_QtCore.QRectF(-h/4, -h/4, w-h/2,h-h/2), image)
 
         if not self._title: return
 
@@ -56,7 +58,7 @@ class IconButtonDisplayedElement(GameDisplayedElement):
         metrics = _QtGui.QFontMetrics(font)
         text_width = metrics.width(self._resources.get_translator().translate(self._title))
 
-        painter.setPen(_QtGui.QColor(0xFFFFFF))
+        painter.setPen(palette.get_color('title'))
         painter.setFont(font)
         painter.drawStaticText(int(-text_width/2), int(h * 1/5), _QtGui.QStaticText(self._resources.get_translator().translate(self._title)))
 

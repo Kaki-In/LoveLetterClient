@@ -1,4 +1,6 @@
 import os as _os
+import events as _events
+import typing as _T
 
 from .translation_language import *
 
@@ -9,10 +11,10 @@ class TranslationsMapper():
 
         dirname = directory
 
-        for file_name in _os.listdir(dirname) or not file_name.endswith(".translate"):
+        for file_name in _os.listdir(dirname):
             file_path = dirname + _os.sep + file_name
 
-            if not _os.path.isfile(file_path):
+            if not (_os.path.isfile(file_path) and file_name.endswith(".translate")):
                 continue
 
             language_name = file_name[:-10]
@@ -24,9 +26,19 @@ class TranslationsMapper():
             raw = file.read()
             file.close()
 
-            result = self.get_translation_data(raw)
+            try:
+                result = self.get_translation_data(raw)
+            except Exception as exc:
+                raise ValueError("could not parse the translation file " + repr(file_path))
 
             self._languages[language_name] = TranslationLanguage(language_name, result)
+        
+        self._events = _events.EventObject(
+            'language'
+        )
+
+    def add_event_listener(self, name: str, function: _T.Callable) -> None:
+        self._events[name].addEventFunction(function)
     
     def get_languages(self) -> list[str]:
         return list(self._languages)
@@ -36,6 +48,7 @@ class TranslationsMapper():
     
     def set_actual_language(self, language: str) -> None:
         self._actual_language = language
+        self._events['language'].emit(language)
 
     def get_actual_language(self) -> str:
         return self._actual_language

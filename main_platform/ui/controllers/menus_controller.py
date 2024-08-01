@@ -5,11 +5,8 @@ from ..menus.menus import *
 
 from ..game import *
 
-from ..menus.controllers.first_controller import *
-from ..menus.controllers.main_controller import *
-from ..menus.controllers.settings_controller import *
-from ..menus.controllers.language_settings_controller import *
-from ...objects.settings import *
+from ..menus.controllers import *
+from ...settings import *
 
 import events as _events
 
@@ -27,11 +24,6 @@ class MenusController():
         self._controllers = []
         self._map = ControllersMapper()
         self._layers: list[GraphicLayer] = []
-
-        self._display.get_resources().get_images_mapper().set_theme_name(settings.get_graphical_settings().get_theme_name())
-        self._display.get_resources().get_translator().set_actual_language(settings.get_language_settings().get_language_id())
-
-        self._display.set_full_screen_mode(settings.get_graphical_settings().get_fullscreen_mode())
 
     def get_thread(self) -> MenusThread:
         return self._thread
@@ -53,6 +45,9 @@ class MenusController():
         
         elif menu_name == "settings.language":
             menu = LanguageSettingsMenu()
+
+        elif menu_name == "settings.graphical":
+            menu = GraphicalSettingsMenu()
 
         else:
             raise ValueError("couldn't find any menu named " + repr(menu_name))
@@ -80,6 +75,10 @@ class MenusController():
         elif type(menu) is LanguageSettingsMenu:
             layer = LanguageSettingsLayer(self._display.get_resources())
             controller = LanguageSettingsGraphicLayerController(layer, menu, self._settings)
+
+        elif type(menu) is GraphicalSettingsMenu:
+            layer = GraphicalSettingsLayer(self._display.get_resources())
+            controller = GraphicalSettingsGraphicLayerController(layer, menu, self._settings)
 
         else:
             raise ValueError("Unknown menu " + type(menu).__name__)

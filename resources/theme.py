@@ -1,13 +1,17 @@
 import os as _os
 import pathlib as _pathlib
-from PyQt5 import QtGui as _QtGui, QtWidgets as _QtWidgets, QtCore as _QtCore
-from .image import *
 
-class ImagesTheme():
+from PyQt5 import QtGui as _QtGui, QtWidgets as _QtWidgets, QtCore as _QtCore
+
+from .image import *
+from .palettes import *
+
+class Theme():
     def __init__(self, dirname: str):
         self._dirname = dirname
+        self._palette = PalettesMapper(dirname + _os.sep + "palette")
 
-        directory = _pathlib.Path( dirname )
+        directory = _pathlib.Path( dirname + _os.sep + "images" )
         
         self._images: dict[str, Image] = {}
         
@@ -38,6 +42,9 @@ class ImagesTheme():
     def get_image_by_name(self, name : str) -> Image:
         return self._images[name]
     
+    def get_palettes_mapper(self) -> PalettesMapper:
+        return self._palette
+    
     def applyEffectToImage(self, src: _QtGui.QImage, effect: _QtWidgets.QGraphicsEffect, extent: int = 0) -> _QtGui.QImage:
         scene = _QtWidgets.QGraphicsScene()
         item = _QtWidgets.QGraphicsPixmapItem()
@@ -52,5 +59,4 @@ class ImagesTheme():
         return res
     
     def get_name(self) -> str:
-        return self._name
-    
+        return self._dirname.split(_os.path.sep)[-1] or self._dirname.split(_os.path.sep)[-2]

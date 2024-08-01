@@ -1,3 +1,3 @@
 from .ui import *
-from .objects import *
+from .platform import *
 from .main_activity import *

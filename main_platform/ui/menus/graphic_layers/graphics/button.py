@@ -29,8 +29,6 @@ class ButtonDisplayedElement(GameDisplayedElement):
         self._ratio_animation.set_one_by_one(False)
         
         self._ratio = 1
-
-        self._image = self._resources.get_images_mapper().get_image_by_name('button').get_default()
     
     def start_threads(self):
         self._size_animation.get_thread().start()
@@ -59,9 +57,11 @@ class ButtonDisplayedElement(GameDisplayedElement):
             event.ignore()
     
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
+        super().paint(painter, options, widget)
+
         text = self._resources.get_translator().translate(self._text)
 
-        super().paint(painter, options, widget)
+        palette = self._resources.get_themes_mapper().get_palette().get_sub_palette('graphics').get_palette('button')
 
         if self._size < 3 / self._ratio:
             return
@@ -69,7 +69,7 @@ class ButtonDisplayedElement(GameDisplayedElement):
         r = self.boundingRect()
         w, h = r.width() - self._size * self._ratio, r.height() - self._size * self._ratio * 4/5
         
-        painter.drawImage(r, self._image)
+        painter.drawImage(r, self._resources.get_themes_mapper().get_image_by_name('button').get_default())
 
         font = _QtGui.QFont("Chomsky", 500)
         fm = _QtGui.QFontMetrics(font)
@@ -95,10 +95,12 @@ class ButtonDisplayedElement(GameDisplayedElement):
         width = fm.width(text)
         height = fm.height()
 
-        if self._enabled:
-            painter.setPen(_QtGui.QColor(0xFFFFFFFF))
-        else:
-            painter.setPen(_QtGui.QColor.fromRgba(0x80FFFFFF))
+        color = _QtGui.QColor(palette.get_color('text'))
+
+        if not self._enabled:
+            color.setAlpha(128)
+
+        painter.setPen(color)
         
         painter.drawText(_QtCore.QPoint( int(-width/2), int(height/4)), text)
         
@@ -117,7 +119,8 @@ class ButtonDisplayedElement(GameDisplayedElement):
         return self._ratio
     
     def boundingRect(self) -> _QtCore.QRectF:
-        image_format = self._image.width() / self._image.height()
+        image = self._resources.get_themes_mapper().get_image_by_name('button').get_default()
+        image_format = image.width() / image.height()
 
         font = _QtGui.QFont("Chomsky", int(self._size * self._ratio))
         fm = _QtGui.QFontMetrics(font)

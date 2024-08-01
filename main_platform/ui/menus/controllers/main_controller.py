@@ -2,7 +2,7 @@ from .controller import *
 
 from ..graphic_layers.main_menu_layer import *
 from ..menus.main_menu import *
-from ....objects.settings import *
+from ....settings import *
 
 import events as _events
 

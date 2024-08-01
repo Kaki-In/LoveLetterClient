@@ -12,7 +12,7 @@ class ThemePreviewDisplayedElement(GameDisplayedElement):
         self._theme_name = theme_name
         super().__init__(resources, 0, 0, 20, 20, parent)
 
-        self._theme = resources.get_images_mapper().get_theme(theme_name)
+        self._theme = resources.get_themes_mapper().get_theme(theme_name)
         
     def paint(self, painter: _QtGui.QPainter, options: _QtWidgets.QStyleOptionGraphicsItem, widget: _QtWidgets.QWidget) -> None:
         super().paint(painter, options, widget)

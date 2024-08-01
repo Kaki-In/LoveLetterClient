@@ -1,6 +1,6 @@
 from ..graphic_layers.layer import *
 from ..menus import *
-from ....objects.settings import *
+from ....settings import *
 
 import typing as _T
 import events as _events

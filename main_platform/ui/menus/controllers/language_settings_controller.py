@@ -2,7 +2,7 @@ from .controller import *
 
 from ..graphic_layers.language_settings import *
 from ..menus.settings_menu import *
-from ....objects.settings import *
+from ....settings import *
 
 import events as _events
 
@@ -53,7 +53,6 @@ class LanguageSettingsGraphicLayerController(LayerController):
 
         self.get_menu().set_language(language)
 
-        self.get_settings().get_language_settings().set_language_id(language[0])
-        self.get_layer().get_resources().get_translator().set_actual_language(language[0])
+        self._settings.get_language_settings().set_language_id(language[0])
 
         self.on_back_pressed(event)

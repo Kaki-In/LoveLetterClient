@@ -5,12 +5,15 @@ import typing as _T
 from .data import *
 
 class SettingsList(SettingsData):
-    def __init__(self, data = None):
+    def __init__(self, data: list | None = None):
         self._events = _events.EventObject(
             'modified'
         )
         super().__init__()
         self._data = data or []
+
+        for element in data:
+            self.plug_events(element)
 
     def get_events(self) -> _events.EventObject:
         return self._events

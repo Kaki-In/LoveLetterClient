@@ -1,5 +1,5 @@
 from ....animations.linear_animation import *
-from ..graphics.list import *
+from ..graphics.dlist import *
 
 import love_letter as _love_letter
 import random as _random

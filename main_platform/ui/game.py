@@ -9,6 +9,7 @@ from .menus.graphic_layers.graphics.mouse import *
 import resources as _resources
 import os as _os
 import typing as _T
+import events as _events
 
 class GameWidget(_QtWidgets.QGraphicsView):
     def __init__(self):
@@ -16,11 +17,9 @@ class GameWidget(_QtWidgets.QGraphicsView):
         
         self._resources = _resources.Resources(_os.environ['HOME'] + _os.sep + ".love_letter" + _os.sep + "resources")
 
-        icon = _QtGui.QIcon(_QtGui.QPixmap(self._resources.get_images_mapper().get_image_by_name("icon").get_variant("64")))
+        icon = _QtGui.QIcon(_QtGui.QPixmap(self._resources.get_themes_mapper().get_image_by_name("icon").get_variant("64")))
         self.setWindowIcon(icon)
         
-        self._resources.get_images_mapper().set_theme_name('cartoon')
-    
         self._scene: _QtWidgets.QGraphicsScene = _QtWidgets.QGraphicsScene()
         
         self.setScene(self._scene)
@@ -54,6 +53,14 @@ class GameWidget(_QtWidgets.QGraphicsView):
         self._last_layer: _T.Optional[GraphicLayer] = None
         self._next_layer: _T.Optional[GraphicLayer] = None
 
+        self._events = _events.EventObject(
+            'geometry_change',
+            'show'
+        )
+    
+    def get_events(self) -> _events.EventObject:
+        return self._events
+
     def set_title(self, title: str) -> None:
         self.setWindowTitle(title)
     
@@ -64,10 +71,11 @@ class GameWidget(_QtWidgets.QGraphicsView):
         if enabled:
             self.showFullScreen()
         else:
-            self.show()
+            self.showNormal()
     
     def onShow(self) -> None:
-        self.resizeEvent()
+        self.update_rect()
+        self._events['show'].emit()
     
     def get_resources(self) -> _resources.Resources:
         return self._resources
@@ -119,7 +127,13 @@ class GameWidget(_QtWidgets.QGraphicsView):
         
         self._next_layer = layer
     
-    def resizeEvent(self, event = None) -> None:
+    def resizeEvent(self, event: _QtGui.QResizeEvent) -> None:
+        super().resizeEvent(event)
+        self._events['geometry_change'].emit(self.geometry())
+
+        self.update_rect()
+    
+    def update_rect(self) -> None:
         w, h = self.width() - 2, self.height() - 2
         
         self.setSceneRect(-w / 2, -h / 2, w, h)
@@ -127,6 +141,10 @@ class GameWidget(_QtWidgets.QGraphicsView):
         
         if self._layer is not None and not self._animation_display.isRunning():
             self._layer.set_rect(-w / 2, -h / 2, w, h)
+    
+    def moveEvent(self, event) -> None:
+        super().moveEvent(event)
+        self._events['geometry_change'].emit(self.geometry())
     
     def mouseMoveEvent(self, event: _QtGui.QMouseEvent) -> None:
         super().mouseMoveEvent(event)

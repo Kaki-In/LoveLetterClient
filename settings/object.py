@@ -5,9 +5,13 @@ import events as _events
 from .data import *
 
 class SettingsObject(SettingsData):
-    def __init__(self, data: dict[str, _T.Any]):
+    def __init__(self, data: dict[str, _T.Any] = None):
         super().__init__()
-        self._data = data
+        self._data = data or {}
+
+        for key in data:
+            self.plug_events(data[key])
+
         self._events = _events.EventObject(
             'modified'
         )
