@@ -2,9 +2,7 @@ from PyQt5 import QtWidgets as _QtWidgets, uic as _uic
 from PyQt5 import QtCore as _QtCore
 from PyQt5 import QtGui as _QtGui
 
-from .menus import *
-from .menus.graphic_layers.graphics.main_element import *
-from .menus.graphic_layers.graphics.mouse import *
+from .graphic_layers import *
 
 import resources as _resources
 import os as _os
